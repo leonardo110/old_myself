@@ -1,8 +1,8 @@
 var bszCaller, bszTag;
 const numLst = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-const num1 = numLst[1] * 10000 + numLst[1] * 1000 + numLst[5] * 100;
+const num1 = numLst[1] * 10000 + numLst[4] * 1000 + numLst[1] * 100;
 const num2 = numLst[8] * 1000 + numLst[5] * 100;
-const num3 = numLst[7] * 1000;
+const num3 = numLst[8] * 1000 + numLst[3] * 100;
 const num = [num1, num2, num3];
 !(function () {
   var c,
