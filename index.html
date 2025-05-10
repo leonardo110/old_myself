@@ -1,0 +1,431 @@
+<html lang="cn">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./img/Normal/Q.svg"/>
+    <link rel="stylesheet" href="./css/loading.css">
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/solid.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/fontawesome.css"
+    />
+    <link rel="stylesheet" href="/css/music.css" />
+    <link rel="stylesheet" type="text/css" href="./index.css" />
+    <link rel="stylesheet" href="./css/card.css">
+    <link rel="stylesheet" href="./css/3d-card.css">
+    <link rel="stylesheet" href="./css/waline.min.css" />
+    <title>权朝阳&nbsp;&nbsp;|&nbsp;&nbsp;矩阵革命</title>
+    <script src="./js/echarts.js"></script>
+    <script src="https://echarts.zhangmuchen.top/dep/echarts/map/js/china.js"></script>
+  </head>
+  <body>
+    <div class="loader"><span>L</span><span>O</span><span>A</span><span>D</span><span>I</span><span>N</span><span>G</span><span></span><span></span><span></span></div>
+    <div id="contentPage">
+      <!-- 背景 -->
+      <div id="myselfGroundImg">
+        <div id="container"></div>
+      </div>
+      <!-- 导航 -->
+      <section style="height: 100vh;">
+        <div id="navTopMenu">
+          <span id="navMenuDiv">
+            <span id="logoContent">
+              <span style="margin-left: -12px"><span style="color: #4cd84f;">Q</span>uanCY</span>
+            </span>
+          </span>
+          <div id="hrefDiv">
+            <a class="hrefText" href="https://quancy.cn">新版2.0</a>
+            <a class="hrefText" id="aboutText">印象</a>
+            <a class="hrefText" id="favorite">绿洲</a>
+            <a class="hrefText" id="footmarkText">足迹</a>
+            <a class="hrefText" id="logText">日志</a>
+            <a class="hrefText" id="msgText">留言</a>
+          </div>
+        </div>
+        <div id="topTitle">
+          <div id="matrix">
+            <span>E=mc<sup>2</sup></span>
+          </div>
+          <span class="myselfCss">
+            <span class="lineOrange"></span>
+          </span>
+        </div>
+        <div id="scrollDown"><span id="scrollDownIcon"></span></div>
+      </section>
+      <!-- 技能 -->
+      <section>
+        <div id="skill">
+          <div class="customModuleRowInner">
+            <div class="ev-module-edit">
+              <div class="ev-module-edit-box1">
+                <strong>SKILLS</strong>
+              </div>
+              <div class="ev-module-edit-box2"></div>
+              <div class="ev-module-edit-box3">
+                <strong>技能</strong>
+              </div>
+            </div>
+            <div class="ev-module-photo">
+                <span id="cardText">基于标准HTML、CSS和JavaScript构建，并提供了一套声明式的、组件化的编程模型。</span>
+            </div>
+            <div class="tariffCards">
+              <div class="economy firstCard">
+                  <img src="./img/Normal/vue.svg" alt="Vue" height="74">
+                  <h3>Vue</h3>
+              </div>
+              <div class="premiumeconomy firstCard">
+                  <img src="./img/Normal/react.svg" alt="React" height="74">
+                  <h3>React</h3>
+              </div>
+              <div class="business firstCard">
+                  <img src="./img/Normal/maya.png" alt="Maya" height="74">
+                  <h3>Maya</h3>
+              </div>
+              <div class="first firstCard">
+                  <img src="./img/Normal/js.svg" alt="JavaScript" height="74">
+                  <h3>JavaScript</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- 印象 -->
+      <section class="like-card">
+        <div class="musicBody">
+          <div class="musicDiv" id="musicId">
+            <div id="app-cover">
+              <div id="player">
+                <div id="player-track" class="active">
+                  <span id="album-name"></span>
+                  <span class="qualityCss">
+                    <img src="./img/Normal/musicVIP.png" id="icon1" class="vipIcon">
+                    <img src="./img/Normal/sq_hq.png" id="icon2" class="vipIcon">
+                    <span id="vipTextId"></span>
+                  </span>
+                  <div id="track-name"></div>
+                  <div id="track-time" class="active">
+                    <div id="current-time"></div>
+                    <div id="track-length"></div>
+                  </div>
+                  <div id="s-area">
+                    <div id="ins-time"></div>
+                    <div id="s-hover"></div>
+                    <div id="seek-bar" style="width: 0px"></div>
+                  </div>
+                </div>
+                <div id="player-content">
+                  <div id="album-art" class="">
+                    <img src="" class="active" id="musicPic" />
+                  </div>
+                  <div class="containerLrc">
+                    <ul class="wordList">
+                    </ul>
+                  </div>
+                  <div id="player-controls">
+                    <div class="control">
+                      <div class="button" id="play-previous">
+                        <i class="fas fa-backward"></i>
+                      </div>
+                    </div>
+                    <div class="control">
+                      <div class="button" id="play-pause-button">
+                        <i class="fa fa-play"></i>
+                      </div>
+                    </div>
+                    <div class="control">
+                      <div class="button" id="play-next">
+                        <i class="fas fa-forward"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="tagContent">
+            <h3 id="myselfDiv">印象</h3>
+            <span class="lineBottom"></span>
+            <div class="curTag">
+              <span>90后</span><span>秦人</span><span>电影</span><span>音乐</span>
+            </div>
+            <div class="curTag">
+              <span id="jay">Jay</span><span id="cr7">CR7</span>
+            </div>
+            <div class="curTag">
+              <span id="marvel">Marvel</span><span>悬疑</span><span id="DC">DC</span>
+            </div>
+            <div class="curTag"><span>理科生</span></div>
+            <div class="curTag"><span>好奇害死猫</span></div>
+          </div>
+        </div>
+      </section>
+      <!-- FAVORITE -->
+      <section class="like-card">
+        <div class="musicBody">
+          <div class="favorite-body">
+            <div class="ev-module-edit">
+              <div class="ev-module-edit-box1">
+                <strong>Oasis</strong>
+              </div>
+              <div class="ev-module-edit-box2"></div>
+              <div class="ev-module-edit-box3">
+                <strong>绿洲</strong>
+              </div>
+            </div>
+            <div class="card-list">
+              <div class="book-card">
+                <img src="./img/Watch-Men/bottom.png" class="cover" />
+                <img src="./img/Watch-Men/logo.png" class="title" />
+                <img src="./img/Watch-Men/men.png" class="hero"/>
+              </div>
+              <div class="book-card">
+                <img src="./img/Three-Body/bottom.png" class="cover" />
+                <img src="./img/Three-Body/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/Three-Body/body.png" class="hero" />
+              </div>
+              <div class="book-card">
+                <img src="./img/Vendetta/bottom.png" class="cover" />
+                <img src="./img/Vendetta/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/Vendetta/vendetta.png" class="hero" />
+              </div>
+              <div class="book-card">
+                <img src="./img/Hacker/bottom.png" class="cover" />
+                <img src="./img/Hacker/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/Hacker/hacker.png" class="hero" />
+              </div>
+              <div class="book-card">
+                <img src="./img/Harry-Potter/bottom.png" class="cover" />
+                <img src="./img/Harry-Potter/logo.png" class="title" />
+                <img src="./img/Harry-Potter/harry.png" class="hero"/>
+              </div>
+              <div class="book-card">
+                <img src="./img/Alien/bottom.jpg" class="cover" />
+                <img src="./img/Alien/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/Alien/alien.png" class="hero" />
+              </div>
+              <div class="book-card">
+                <img src="./img/Predator/bottom.png" class="cover" />
+                <img src="./img/Predator/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/Predator/predator.png" class="hero" />
+              </div>
+              <div class="book-card">
+                <img src="./img/Ring/bottom.png" class="cover" />
+                <img src="./img/Ring/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/Ring/ring.png" class="hero" />
+              </div>
+              <div class="book-card">
+                <img src="./img/BatMan/bottom.png" class="cover" />
+                <img src="./img/BatMan/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/BatMan/joker.png" class="hero" />
+              </div>
+              <div class="book-card">
+                <img src="./img/Green/bottom.png" class="cover" />
+                <img src="./img/Green/logo.png" class="title" style="height: 35px;top: 10"/>
+                <img src="./img/Green/green.png" class="hero" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- 地图 -->
+      <section>
+        <div style="backdrop-filter: blur(100px) !important;padding: 40px;" class="mapMark">
+          <div class='chartsWrapper' id='map'></div>
+          <div class="mapBlank"></div>
+        </div>
+      </section>
+      <!-- 时间线 -->
+      <div id="chronicles">
+        <h3>迭代时间线</h3>
+        <span class="divLine"></span>
+        <p id="sitTip"></p>
+        <div class="chronicles-container-wrapper">
+          <div id="chronicles-container">
+            <div>
+              <p class="chronicles-child-lineTime">2023-05-21</p>
+              <p class="chronicles-child-body">注册「quancy.cn」域名</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2023-06-09</p>
+              <p class="chronicles-child-body">网站初版v1.0页面上线</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2023-09-19</p>
+              <p class="chronicles-child-body">网站使用2D WebGL渲染背景</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2023-10-08</p>
+              <p class="chronicles-child-body">网站新增音乐模块</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2023-10-19</p>
+              <p class="chronicles-child-body">网站新增留言板模块</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2023-11-07</p>
+              <p class="chronicles-child-body">网站进行ICP备案</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2023-11-28</p>
+              <p class="chronicles-child-body">网站使用全新UI界面2.0</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2024-10-18</p>
+              <p class="chronicles-child-body">网站新增个人旅游足迹</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2025-01-10</p>
+              <p class="chronicles-child-body">网站留言板新增Email邮件推送</p>
+            </div>
+            <div>
+              <p class="chronicles-child-lineTime">2025-03-05</p>
+              <p class="chronicles-child-body">网站新增绿洲模块</p>
+            </div>
+            <div title="敬请期待...">
+              <p class="chronicles-child-fade-out">2025</p>
+              <p class="chronicles-child-fade-out">项目施工中...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 留言板 -->
+      <div class="walineDiv">
+        <div id="waline"></div>
+      </div>
+      <!-- footer -->
+      <footer style="z-index: 1; padding-top: 60px">
+        <div>
+          <p>我的作品</p>
+          <a
+            href="https://lighttab.cn/tabself"
+            target="_blank"
+            >轻羽标签页</a
+          ><br />
+        </div>
+        <div>
+          <p>与我联系</p>
+          <a id="mailId">我的邮箱</a><br />
+        </div>
+        <div id="copyright">
+          <p><b>©2023&nbsp;&nbsp;权朝阳</b></p>
+          <p><a href="https://beian.miit.gov.cn/" target="_blank" id="icpCss">陕ICP备2023015789号-1</a></p>
+        </div>
+      </footer>
+      <div id="busuanzi_container_site_pv">
+        <div id="contributionBox">
+          <span class="contributionAutor">网站贡献：</span>
+            <img src="https://pic1.imgdb.cn/item/67c54779d0e0a243d40a93cc.jpg" class="contributionImg" title="池佳伟">
+            <img src="https://pic.imgdb.cn/item/6538d28bc458853aeff7525c.jpg" class="contributionImg" title="田江龙">
+        </div>
+        <span class="busuanzispan">&nbsp;本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
+        |<span class="busuanzispan">&nbsp;访客数 <span id="busuanzi_value_site_uv"></span> 人次</span>
+        <!-- 阅读量: <span class="waline-pageview-count" data-path="" /> -->
+        <!-- <span class="busuanzispan">总阅读量 <span id="busuanzi_value_page_pv"></span> 次</span> -->
+      </div>
+    </div>
+    <script src="/js/busuanzi.js"></script>
+    <!-- data-main 属性指定了RequireJS加载完成后需要第一个加载的JavaScript模块文件路径 -->
+    <script src="./js/require.js" data-main="./js/nebulon.js"></script>
+    <script src="/js/constant.js"></script>
+    <script src="./js/site.js"></script>
+    <script src="./index.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/music.js"></script>
+    <script src="./js/newMap.js"></script>
+    <script type="module">
+      import { init } from "./js/waline.min.js";
+      init({
+        el: "#waline",
+        serverURL: "https://msgboard.site",
+        path: '/',
+        reaction: true,
+        locale: {
+          reactionTitle: '对小站有什么想法，说说吧~',
+          comment: '留言板',
+          placeholder: '无需登录，畅所欲言~',
+        },
+        // 阅读量
+        // pageview: true
+      });
+      document.getElementsByClassName('wl-power')[0].style.display = 'none'
+      document.querySelector(".wl-actions a").style.display = 'none'
+    </script>
+    <script>
+      /**
+       * 发送邮件
+       */
+       function sendEmailNew() {
+        const fromName = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-nick').innerText
+        const content = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-content').innerText
+        //第一步：建立所需的对象
+        let httpRequest = new XMLHttpRequest();
+        const urlStr = 'https://api.emailjs.com/api/v1.0/email/send'
+        httpRequest.open('POST', urlStr, true);
+        httpRequest.setRequestHeader("Content-Type", "application/json")
+        httpRequest.setRequestHeader("accessToken", 'pvs-WoCFVPrHTVP2yXQ0a')
+        var data = {
+          service_id: 'service_1zz86vm',
+          template_id: 'template_rky5kdc',
+          user_id: '4TTOyipOWaFt3nIgq',
+          template_params: {
+            'form_name': fromName,
+            'from_content': content,
+            'from_message': '【Waline】'
+          }
+        };
+        console.log('start httpRequest...', fromName, content)
+        httpRequest.onreadystatechange = () => {
+          console.log('in httpRequest...', httpRequest)
+          if (httpRequest.readyState === 4) {
+              if (httpRequest.status === 200) {
+                  var result = httpRequest.responseText;
+                  if (result === 'OK') {
+                    alert('\t✨ 留言提醒 ✨\n\n作者最近工作繁忙，\n您的留言内容已推送邮件告知，\n请您耐心等待回复~\n\n祝您开心！🎉')
+                  }
+              } else {
+                console.error('邮件发送失败...')
+              }
+          } else {
+              console.error('邮件发送失败...')
+          }
+        }
+        //第三步：发送请求
+        httpRequest.send(JSON.stringify(data));
+      }
+
+      // 创建一个观察器实例
+      const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+              console.log('in mutation...', mutation)
+              if (mutation.type === 'characterData' || mutation.type === 'childList') {
+                  const newValue = mutation.target.textContent;
+                  // 发送邮件
+                  console.log('send email...')
+                  const srcUrl = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-user img').src
+                  if (!srcUrl.includes('pic.imgdb.cn')) {
+                    sendEmailNew()
+                  }
+              }
+          });
+      });
+
+      // 获取目标元素
+      setTimeout(() => {
+        const targetNode = document.querySelector('.wl-num');
+        if (targetNode) {
+          // 配置观察选项
+          const config = {
+              characterData: true,
+              childList: true,
+              subtree: true
+          };
+          // 开始观察
+          console.log('start observe...')
+          observer.observe(targetNode, config);
+        }
+      }, 3500);
+    </script>
+  </body>
+</html>

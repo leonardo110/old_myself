@@ -1,0 +1,56 @@
+.favorite-body {
+  margin: 0 auto;
+  position: relative;
+  width: 90%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 25% 75%;
+}
+
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 120px;
+}
+.like-card {
+  height: calc(100vh - 100px);
+}
+.book-card {
+  width: 12em;
+  margin: 0 30px;
+  position: relative;
+  :nth-child(1) {
+    box-shadow: 0 35px 35px -8px rgba(0, 0, 0, 0.75);
+  }
+}
+.book-card img {
+  position: absolute;
+  width: 100%;
+  transition: 0.2s;
+}
+.cover {
+  z-index: 1;
+  opacity: 0.7;
+  border-radius: 15px;
+}
+.book-card:hover .cover {
+  transform: perspective(500px) rotateX(25deg);
+}
+.hero {
+  z-index: 2;
+  opacity: 0;
+}
+.book-card:hover .hero {
+  opacity: 1;
+  transform: perspective(500px) translate3d(0, -80px, 50px);
+}
+.title {
+  z-index: 3;
+  top: 0;
+  transform: scale(0.85);
+}
+.book-card:hover .title {
+  transform: perspective(500px) translate3d(0, 150px, 50px) scale(1.1);
+}
