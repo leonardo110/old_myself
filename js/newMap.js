@@ -313,11 +313,11 @@ const option = {
             const res = "";
             const name = chinaDatas[params.dataIndex][0].name;
             const value = chinaDatas[params.dataIndex][0].value;
-            if (name === '西安') {
-                res = "<span style='color:#fff;'>" + name + "<br/>！！！秦人集合！！！</span>";
-            } else {
-                res = "<span style='color:#fff;'>" + name + "<br/>去过：" + (value / 3) + "次</span>";
-            }
+            // if (name === '西安') {
+            //     res = "<span style='color:#fff;'>" + name + "<br/>！！！秦人集合！！！</span>";
+            // } else {
+            //     res = "<span style='color:#fff;'>" + name + "<br/>去过：" + (value / 3) + "次</span>";
+            // }
             return res;
         },
     },

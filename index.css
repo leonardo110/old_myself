@@ -97,7 +97,7 @@ label {
   color: #64ccff !important;
 }
 .wl-card .wl-meta > span {
-  background: #55eff0bd !important;
+  background: linear-gradient(to left, rgb(255, 105, 180), rgb(255, 69, 0), orange, gold, rgb(255, 69, 0), rgb(144, 238, 144), rgb(0, 255, 255), rgb(30, 144, 255), rgb(147, 112, 219)) 0% 0% / 20vw !important;
   color: #fff !important;
 }
 .wl-card .wl-meta {

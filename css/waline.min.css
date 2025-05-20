@@ -115,6 +115,12 @@
   vertical-align: middle;
   margin-top: -2px;
 }
+.wl-browser{
+  margin-left: 5px;
+}
+.wl-os{
+  margin-left: 5px;
+}
 .wl-btn {
   display: inline-block;
   vertical-align: middle;

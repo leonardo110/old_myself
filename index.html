@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="./css/3d-card.css">
     <link rel="stylesheet" href="./css/waline.min.css" />
     <title>权朝阳&nbsp;&nbsp;|&nbsp;&nbsp;矩阵革命</title>
+    <script src="./js/danmu.js"></script>
     <script src="./js/echarts.js"></script>
     <script src="https://echarts.zhangmuchen.top/dep/echarts/map/js/china.js"></script>
   </head>
@@ -283,6 +284,10 @@
               <p class="chronicles-child-lineTime">2025-03-05</p>
               <p class="chronicles-child-body">网站新增绿洲模块</p>
             </div>
+            <div>
+              <p class="chronicles-child-lineTime">2025-05-20</p>
+              <p class="chronicles-child-body">网站新增弹幕功能</p>
+            </div>
             <div title="敬请期待...">
               <p class="chronicles-child-fade-out">2025</p>
               <p class="chronicles-child-fade-out">项目施工中...</p>
@@ -290,8 +295,10 @@
           </div>
         </div>
       </div>
-      <!-- 留言板 -->
       <div class="walineDiv">
+        <!-- 弹幕墙 -->
+        <div id="danmu" style="height: 300px;"></div>
+        <!-- 留言板 -->
         <div id="waline"></div>
       </div>
       <!-- footer -->
@@ -344,88 +351,41 @@
         locale: {
           reactionTitle: '对小站有什么想法，说说吧~',
           comment: '留言板',
-          placeholder: '无需登录，畅所欲言~',
+          placeholder: '无需登录，谨慎留言。\n请勿发表任何关于煽动颠覆国家政权、分裂国家、破坏国家统一，宣扬恐怖主义、极端主义、民族仇恨和暴力的反动言论！！！',
         },
+        highlighter: (code, lang) => {
+          if (!window.Prism.languages[lang]) {
+            window.Prism.plugins.autoloader.loadLanguages(lang);
+          }
+          return window.Prism.highlight(
+            code,
+            window.Prism.languages[lang] || window.Prism.languages.text,
+            lang,
+          );
+        },
+        texRenderer: (blockMode, tex) =>
+          katex.renderToString(tex, {
+            displayMode: blockMode,
+            throwOnError: false,
+          }),
+        noCopyright: false,
+        // 设置 emoji 为微博与哔哩小黄脸
+        emoji: [
+          '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+          '//unpkg.com/@waline/emojis@1.2.0/qq',
+          '//unpkg.com/@waline/emojis@1.2.0/weibo',
+          '//unpkg.com/@waline/emojis@1.2.0/tieba',
+          '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+          '//unpkg.com/@waline/emojis@1.2.0/soul-emoji'
+        ],
+        // 每页数量
+        pageSize: 20,
         // 阅读量
         // pageview: true
       });
       document.getElementsByClassName('wl-power')[0].style.display = 'none'
       document.querySelector(".wl-actions a").style.display = 'none'
-    </script>
-    <script>
-      /**
-       * 发送邮件
-       */
-       function sendEmailNew() {
-        const fromName = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-nick').innerText
-        const content = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-content').innerText
-        //第一步：建立所需的对象
-        let httpRequest = new XMLHttpRequest();
-        const urlStr = 'https://api.emailjs.com/api/v1.0/email/send'
-        httpRequest.open('POST', urlStr, true);
-        httpRequest.setRequestHeader("Content-Type", "application/json")
-        httpRequest.setRequestHeader("accessToken", 'pvs-WoCFVPrHTVP2yXQ0a')
-        var data = {
-          service_id: 'service_1zz86vm',
-          template_id: 'template_rky5kdc',
-          user_id: '4TTOyipOWaFt3nIgq',
-          template_params: {
-            'form_name': fromName,
-            'from_content': content,
-            'from_message': '【Waline】'
-          }
-        };
-        console.log('start httpRequest...', fromName, content)
-        httpRequest.onreadystatechange = () => {
-          console.log('in httpRequest...', httpRequest)
-          if (httpRequest.readyState === 4) {
-              if (httpRequest.status === 200) {
-                  var result = httpRequest.responseText;
-                  if (result === 'OK') {
-                    alert('\t✨ 留言提醒 ✨\n\n作者最近工作繁忙，\n您的留言内容已推送邮件告知，\n请您耐心等待回复~\n\n祝您开心！🎉')
-                  }
-              } else {
-                console.error('邮件发送失败...')
-              }
-          } else {
-              console.error('邮件发送失败...')
-          }
-        }
-        //第三步：发送请求
-        httpRequest.send(JSON.stringify(data));
-      }
-
-      // 创建一个观察器实例
-      const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-              console.log('in mutation...', mutation)
-              if (mutation.type === 'characterData' || mutation.type === 'childList') {
-                  const newValue = mutation.target.textContent;
-                  // 发送邮件
-                  console.log('send email...')
-                  const srcUrl = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-user img').src
-                  if (!srcUrl.includes('pic.imgdb.cn')) {
-                    sendEmailNew()
-                  }
-              }
-          });
-      });
-
-      // 获取目标元素
-      setTimeout(() => {
-        const targetNode = document.querySelector('.wl-num');
-        if (targetNode) {
-          // 配置观察选项
-          const config = {
-              characterData: true,
-              childList: true,
-              subtree: true
-          };
-          // 开始观察
-          console.log('start observe...')
-          observer.observe(targetNode, config);
-        }
-      }, 3500);
-    </script>
+      </script>
+      <script src="./js/initDanmu.js"></script>
   </body>
 </html>
