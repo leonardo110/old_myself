@@ -13,10 +13,10 @@ window.oncontextmenu = function (event) {
   return false;
 };
 
-// document.addEventListener('keydown',function(event){
-//   event = window.event || event
-//   if(window.event && window.event.keyCode == 123) {
-//       // event.keyCode =0;
-//       event.returnValue = false
-//   }
-// })
+document.addEventListener('keydown',function(event){
+  event = window.event || event
+  if(window.event && window.event.keyCode == 123) {
+      // event.keyCode =0;
+      event.returnValue = false
+  }
+})
