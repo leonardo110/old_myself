@@ -1,86 +1,55 @@
-// 创建弹幕实例
-const styles = {
-    color: '#fff',
-    fontSize: '15px',
-    background: 'linear-gradient(45deg, black, transparent)',
-    padding: '8px 15px',
-    borderRadius: '25px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    maxWidth: '300px' /* 设置元素宽度 */
-};
+// 初始化的评论
+let initMsgLst = []
 
-const newStyles = {
-  color: '#fff',
-  fontSize: '15px',
-  background: 'yellow',
-  padding: '8px 15px',
-  borderRadius: '25px',
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  maxWidth: '300px', /* 设置元素宽度 */
-  border: '2px solid red',
-  boxShadow: '0 0 10px rgba(255, 255, 0, 0.5)',
-  transform: 'scale(1.2)',
-  transition: 'transform 0.3s ease-in-out',
-}
 // 新提交的评论（仅限新提交的）
 let newMsgLst = []
 
-const newDanmuClass = {
-  border: '2px solid green',
-}
-const manager = new Danmu.create({
+let manager
+
+function initManager() {
+  manager = new Danmu.create({
     mode: 'strict',
     // 其他配置选项
     trackHeight: '25%',
-    durationRange: [20000, 20000],
-    speed: 0.1,
-    gap: 100,
+    durationRange: [30000, 30000],
+    speed: null,
+    gap: 200,
     limits: {
-      view: 20,
-      stash: 50
+      view: 100,
+      stash: 150
     },
-    interval: 2000,
+    interval: 1000,
     rate: 1,
-    speed: '100% / 2000', // duration 约等于 1000ms
     plugin: {
       $createNode(danmaku) {
-          danmaku.node.textContent = danmaku.data
-          danmaku.setloop();
-          danmaku.updateDuration(20000)
-          // setTimeout(() => {
-          //   danmaku.pause()
-          // }, 8000);
-      },
-      willRender(ref) {
-          // console.log(ref.type); // 即将要渲染的弹幕类型
-          // console.log(ref.danmaku); // 即将要渲染的弹幕实例
-          // ref.prevent = true; // 设置为 true 将阻止渲染，可以在这里做弹幕过滤工作
-          return ref;
-      },
-      $beforeMove(danmaku) {
-          for (const key in styles) {
-            danmaku.setStyle(key, styles[key]);
-          }
+        const domValueList = danmaku.data.split('-')
+        // 如果为true则为新提交的评论
+        const flag = domValueList[domValueList.length - 1] !== 'new'
+        danmaku.node.innerHTML = `
+          <div class=${flag ? 'danmu-body' : 'danmu-body-new'}>
+            <img class='avatar-img' src=${domValueList[0]}/>
+            <span class='danmu-content-text'>
+              <span>${domValueList[1]}</span>：${domValueList[2]}
+            </span>
+          </div>
+        `;
+        danmaku.setloop();
+        // danmaku.pause()
       },
     },
-});
-const danmuDom = document.getElementById('danmu');
-// 挂载，然后开始渲染
-manager.mount(danmuDom);
-manager.startPlaying();
+  });
+  const danmuDom = document.getElementById('danmu');
+  // 挂载，然后开始渲染
+  manager.mount(danmuDom);
+  manager.startPlaying();
+}
 
 function initDanmuDom(list) {
-    const emojiList = ['🤩', '😎', '😃', '🤖', '🤓', '😄', '😆', '🤗', '💯', '🤔']
-    // manager.push('测试山东科技撒谎开大会打卡机核打击阿卡久啊说哈等哈')
     for (let index = 1; index < list.length; index++) {
         const item = list[index];
         const { avatar, nick, type, orig } = item
         if (type !== "administrator") {
-          manager.push(`${emojiList[Math.floor(Math.random() * 10)]}【${nick}】：${orig}`);
+          manager.push(`${avatar}-${nick}-${orig}`);
         }
     }
 }
@@ -99,12 +68,15 @@ function getWalineMsg(size, flag) {
           var json = httpRequest.responseText; //获取到json字符串，还需解析
           const msgList = JSON.parse(json).data
           if (flag === 'init') {
+            initMsgLst = msgList
+            initManager()
             initDanmuDom(msgList)
           } else {
             newMsgLst = [...msgList].filter((item) => {
               return item.type !== 'administrator'
             })
-            manager.unshift(newMsgLst[0].orig)
+            const { avatar, nick, orig } = newMsgLst[0]
+            manager.unshift(`${avatar}-${nick}-${orig}-new`)
           }
         }
       }
@@ -113,7 +85,15 @@ function getWalineMsg(size, flag) {
     httpRequest.send(null);
 }
 
-getWalineMsg(50, 'init')
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    manager.freeze();
+  } else {
+    manager.unfreeze();
+  }
+});
+
+getWalineMsg(100, 'init')
 
 /**
  * 发送邮件、弹幕

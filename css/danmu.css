@@ -1,0 +1,56 @@
+.danmu-body{
+    color: #fff;
+    font-size: 15px;
+    background: url('../img/Danmu/danmu-bg.png') 7% -16% no-repeat;
+    background-size: 100% 125%;
+    padding: 10px 15px;
+    border-radius: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 350px;
+}
+
+.danmu-body-new{
+    color: #fff;
+    font-size: 20px;
+    background: url('../img/Danmu/danmu-bg.png') no-repeat;
+    background-size: 100% 125%;
+    padding: 15px 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 30px;
+    max-width: 380px;
+    border: 1px solid #a444ff;
+    box-shadow: 1px 1px 5px #c88dff;
+}
+
+.danmu-body-new img {
+    width: 30px;
+    height: 30px;
+}
+
+.danmu-body img {
+    width: 25px;
+    height: 25px;
+}
+
+.avatar-img{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.danmu-content-text{
+    vertical-align: middle;
+}
+
+.green-name{
+    color: #63de8d;
+}
+
+.red-name{
+    color: #ff8484;
+}
