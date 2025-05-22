@@ -236,7 +236,7 @@ const locale = {
   sticky: '置顶',
   word: '字',
   wordHint: '评论字数应在 $0 到 $1 字之间！\n当前字数：$2',
-  anonymous: '匿名',
+  anonymous: '吃瓜群众',
   level0: '潜水',
   level1: '冒泡',
   level2: '吐槽',

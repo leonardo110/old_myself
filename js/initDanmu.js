@@ -11,12 +11,12 @@ function initManager() {
     mode: 'strict',
     // 其他配置选项
     trackHeight: '25%',
-    durationRange: [30000, 30000],
+    durationRange: [15000, 30000],
     speed: null,
-    gap: 200,
+    gap: 350,
     limits: {
-      view: 100,
-      stash: 150
+      view: 30,
+      stash: 100
     },
     interval: 1000,
     rate: 1,
@@ -41,6 +41,7 @@ function initManager() {
   const danmuDom = document.getElementById('danmu');
   // 挂载，然后开始渲染
   manager.mount(danmuDom);
+  manager.setTrackHeight('100% / 5');
   manager.startPlaying();
 }
 
@@ -93,7 +94,7 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-getWalineMsg(100, 'init')
+getWalineMsg(30, 'init')
 
 /**
  * 发送邮件、弹幕
