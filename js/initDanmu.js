@@ -15,7 +15,7 @@ function initManager() {
     speed: null,
     gap: 350,
     limits: {
-      view: 30,
+      view: 50,
       stash: 100
     },
     interval: 1000,
@@ -25,9 +25,10 @@ function initManager() {
         const domValueList = danmaku.data.split('-')
         // 如果为true则为新提交的评论
         const flag = domValueList[domValueList.length - 1] !== 'new'
+        const url = domValueList[0]
         danmaku.node.innerHTML = `
           <div class=${flag ? 'danmu-body' : 'danmu-body-new'}>
-            <img class='avatar-img' src=${domValueList[0]}/>
+            <img class='avatar-img' src=${url} />
             <span class='danmu-content-text'>
               <span>${domValueList[1]}</span>：${domValueList[2]}
             </span>
@@ -86,15 +87,7 @@ function getWalineMsg(size, flag) {
     httpRequest.send(null);
 }
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
-    manager.freeze();
-  } else {
-    manager.unfreeze();
-  }
-});
-
-getWalineMsg(30, 'init')
+getWalineMsg(50, 'init')
 
 /**
  * 发送邮件、弹幕
@@ -162,6 +155,18 @@ var intervalFunc = setInterval(() => {
       clearInterval(intervalFunc)
   }
 }, 3000);
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      console.log('freeze...')
+      manager.freeze();
+    } else {
+      console.log('unfreeze...')
+      manager.unfreeze();
+    }
+  });
+})
 
 function observeFunc(targetNode) {
   // 配置观察选项

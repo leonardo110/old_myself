@@ -59,6 +59,7 @@ document.getElementById("DC").onclick = () => {
 document.getElementById("mailId").onclick = () => {
   window.open("mailto:jaychou_master@163.com");
 };
+document.querySelector('#copyright p b').innerText = `©${new Date().getFullYear()} 权朝阳`
 setTimeout(() => {
   let cardDomList = document.getElementsByClassName("firstCard");
   let dom = "";

@@ -271,7 +271,7 @@ $(function () {
       info = {
         title: "不走寻常路(美特斯邦威广告歌)",
         singer: "周杰伦",
-        cover: "https://pic1.imgdb.cn/item/67c01d36d0e0a243d4070796.png",
+        cover: "https://pic1.imgdb.cn/item/68302b3258cb8da5c80a2415.png",
         music_url: "../song/不走寻常路.mp3",
         quality: 'SQ无损'
       }
