@@ -34,11 +34,12 @@
         <div id="navTopMenu">
           <span id="navMenuDiv">
             <span id="logoContent">
-              <span style="margin-left: -12px"><span style="color: #4cd84f;">Q</span>uanCY</span>
+              <img src="./img/Normal/avatar.png" class="avator-class">
+              <span style="margin-left: -12px;vertical-align: middle;"><span style="color: #4cd84f;">Q</span>uanCY</span>
             </span>
           </span>
           <div id="hrefDiv">
-            <a class="hrefText" href="https://quancy.cn">新版2.0</a>
+            <a class="hrefText" href="https://new.quancy.cn">新版2.0</a>
             <a class="hrefText" id="aboutText">印象</a>
             <a class="hrefText" id="favorite">绿洲</a>
             <a class="hrefText" id="footmarkText">足迹</a>
@@ -335,7 +336,8 @@
     </div>
     <script src="/js/busuanzi.js"></script>
     <!-- data-main 属性指定了RequireJS加载完成后需要第一个加载的JavaScript模块文件路径 -->
-    <script src="./js/require.js" data-main="./js/nebulon.js"></script>
+    <script src="./js/require.js"></script>
+    <script src="./js/nebulon.js"></script>
     <script src="/js/constant.js"></script>
     <script src="./js/site.js"></script>
     <script src="./index.js"></script>
@@ -352,7 +354,7 @@
         locale: {
           reactionTitle: '对小站有什么想法，说说吧~',
           comment: '留言板',
-          placeholder: '无需登录，谨慎留言。\n请勿发表任何关于煽动颠覆国家政权、分裂国家、破坏国家统一，宣扬恐怖主义、极端主义、民族仇恨和暴力的反动言论！！！',
+          placeholder: '无需登录，谨慎留言。\n\nTip: 请勿发表任何关于煽动颠覆国家政权、分裂国家、破坏国家统一，宣扬恐怖主义、极端主义、民族仇恨和暴力的反动言论！！！',
         },
         highlighter: (code, lang) => {
           if (!window.Prism.languages[lang]) {
@@ -386,7 +388,7 @@
       });
       document.getElementsByClassName('wl-power')[0].style.display = 'none'
       document.querySelector(".wl-actions a").style.display = 'none'
-      </script>
-      <script src="./js/initDanmu.js"></script>
+    </script>
+    <script src="./js/initDanmu.js"></script>
   </body>
 </html>

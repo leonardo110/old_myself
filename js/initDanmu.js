@@ -15,7 +15,7 @@ function initManager() {
     speed: null,
     gap: 350,
     limits: {
-      view: 50,
+      view: 30,
       stash: 100
     },
     interval: 1000,
@@ -87,7 +87,7 @@ function getWalineMsg(size, flag) {
     httpRequest.send(null);
 }
 
-getWalineMsg(50, 'init')
+getWalineMsg(30, 'init')
 
 /**
  * 发送邮件、弹幕
