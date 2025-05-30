@@ -56,13 +56,13 @@ function initDanmuDom(list) {
     }
 }
 
-function getWalineMsg(size, flag) {
+function invokeApi(flag, method, url, data) {
     let httpRequest = new XMLHttpRequest();
     //第二步：打开连接  将请求参数写在url中
     httpRequest.open(
-      "GET",
-      `https://msgboard.site/comment?path=%2F&pageSize=${size}&page=1&lang=zh-CN&sortBy=insertedAt_desc`,
-      false
+      method,
+      url,
+      data ? true : false
     );
     httpRequest.onreadystatechange = async function () {
       if (httpRequest.readyState === 4) {
@@ -84,10 +84,24 @@ function getWalineMsg(size, flag) {
       }
     };
     //第三步：发送请求
-    httpRequest.send(null);
+    httpRequest.send(data || null);
 }
 
-getWalineMsg(30, 'init')
+let count = 0
+window.addEventListener("scroll", function scrollLoadMore() {
+  let scrollTop = document.body.scrollTop; //滚动上去隐藏部分的高度
+  const scrollHeight = document.getElementById("skill").scrollHeight;
+  if (scrollTop > scrollHeight / 2) {
+    document.getElementById("navTopMenu").style.backdropFilter = "blur(100px)";
+    if (count === 0) {
+      count++
+      // 查询前30条留言
+      invokeApi('init', 'get', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
+    }
+  } else {
+    document.getElementById("navTopMenu").style.backdropFilter = "";
+  }
+});
 
 /**
  * 发送邮件、弹幕
@@ -140,7 +154,7 @@ const observer = new MutationObserver((mutations) => {
           console.log('send email...')
           const srcUrl = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-user img').src
           if (!srcUrl.includes('pic.imgdb.cn')) {
-              await getWalineMsg(2, 'new')
+              await invokeApi('new', 'get', `https://msgboard.site/comment?path=%2F&pageSize=2&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
               sendEmailNew()
           }
       }
