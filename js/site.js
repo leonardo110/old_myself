@@ -70,11 +70,12 @@ setTimeout(() => {
       cardDom.innerText = cardDescList[x];
     };
   }
+  const logDom = document.querySelector('#chronicles-container')
+  logDom.scrollLeft = logDom.scrollWidth
 }, 0);
 window.addEventListener("scroll", function scrollLoadMore() {
   let scrollTop = document.body.scrollTop; //滚动上去隐藏部分的高度
-  const scrollHeight = document.getElementById("skill").scrollHeight;
-  if (scrollTop > scrollHeight / 2) {
+  if (scrollTop > 0) {
     document.getElementById("navTopMenu").style.backdropFilter = "blur(100px)";
   } else {
     document.getElementById("navTopMenu").style.backdropFilter = "";

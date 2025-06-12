@@ -29,6 +29,7 @@
 .musicBody{
   backdrop-filter: blur(100px);
   height: calc(100vh - 100px);
+  padding-top: 30px;
 }
 #musicDialog{
   border: 1px solid lightgrey;

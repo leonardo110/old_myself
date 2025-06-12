@@ -91,15 +91,12 @@ let count = 0
 window.addEventListener("scroll", function scrollLoadMore() {
   let scrollTop = document.body.scrollTop; //滚动上去隐藏部分的高度
   const scrollHeight = document.getElementById("skill").scrollHeight;
-  if (scrollTop > scrollHeight / 2) {
-    document.getElementById("navTopMenu").style.backdropFilter = "blur(100px)";
+  if (scrollTop > scrollHeight) {
     if (count === 0) {
       count++
       // 查询前30条留言
       invokeApi('init', 'get', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
     }
-  } else {
-    document.getElementById("navTopMenu").style.backdropFilter = "";
   }
 });
 

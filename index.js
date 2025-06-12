@@ -13,10 +13,17 @@ window.oncontextmenu = function (event) {
   return false;
 };
 
-document.addEventListener('keydown',function(event){
-  event = window.event || event
-  if(window.event && window.event.keyCode == 123) {
-      // event.keyCode =0;
-      event.returnValue = false
-  }
-})
+// var h = window.screen.height,w=window.screen.width;
+// window.onresize = function () {
+//     if (h!= window.innerHeight||w!=window.innerWidth){
+//         window.close();
+//     }
+// }
+
+// document.addEventListener('keydown',function(event){
+//   event = window.event || event
+//   if(window.event && window.event.keyCode == 123) {
+//       // event.keyCode =0;
+//       event.returnValue = false
+//   }
+// })

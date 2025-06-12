@@ -3,6 +3,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="./img/Normal/Q.svg"/>
     <link rel="stylesheet" href="./css/loading.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
       var _hmt = _hmt || [];
       (function() {
@@ -69,37 +70,8 @@
       <!-- 技能 -->
       <section>
         <div id="skill">
-          <div class="customModuleRowInner">
-            <div class="ev-module-edit">
-              <div class="ev-module-edit-box1">
-                <strong>SKILLS</strong>
-              </div>
-              <div class="ev-module-edit-box2"></div>
-              <div class="ev-module-edit-box3">
-                <strong>技能</strong>
-              </div>
-            </div>
-            <div class="ev-module-photo">
-                <span id="cardText">基于标准HTML、CSS和JavaScript构建，并提供了一套声明式的、组件化的编程模型。</span>
-            </div>
-            <div class="tariffCards">
-              <div class="economy firstCard">
-                  <img src="./img/Normal/vue.svg" alt="Vue" height="74">
-                  <h3>Vue</h3>
-              </div>
-              <div class="premiumeconomy firstCard">
-                  <img src="./img/Normal/react.svg" alt="React" height="74">
-                  <h3>React</h3>
-              </div>
-              <div class="business firstCard">
-                  <img src="./img/Normal/maya.png" alt="Maya" height="74">
-                  <h3>Maya</h3>
-              </div>
-              <div class="first firstCard">
-                  <img src="./img/Normal/js.svg" alt="JavaScript" height="74">
-                  <h3>JavaScript</h3>
-              </div>
-            </div>
+          <div style="backdrop-filter: blur(100px) !important;padding: 40px;">
+            <div class='chartsWrapper' id='link'></div>
           </div>
         </div>
       </section>
@@ -299,6 +271,10 @@
               <p class="chronicles-child-lineTime">2025-05-20</p>
               <p class="chronicles-child-body">网站新增弹幕功能</p>
             </div>
+            <div>
+              <p class="chronicles-child-lineTime">2025-06-12</p>
+              <p class="chronicles-child-body">重写技术栈关系图</p>
+            </div>
             <div title="敬请期待...">
               <p class="chronicles-child-fade-out">2025</p>
               <p class="chronicles-child-fade-out">项目施工中...</p>
@@ -353,6 +329,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/music.js"></script>
     <script src="./js/newMap.js"></script>
+    <script src="./js/link.js"></script>
     <script type="module">
       import { init } from "./js/waline.min.js";
       init({

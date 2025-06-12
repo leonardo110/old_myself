@@ -1,3 +1,431 @@
+const graph = {
+  "nodes": [
+    {
+      "id": "Web",
+      "name": "Web",
+      "symbolSize": 30,
+      "x": -10,
+      "y": 30,
+      "value": 30,
+      "category": 0
+    },
+    {
+      "id": "Html",
+      "name": "Html", 
+      "symbolSize": 20,
+      "x": -100,
+      "y": 60,
+      "value": 20,
+      "category": 1
+    },
+    {
+      "id": "Canvas",
+      "name": "Canvas",
+      "symbolSize": 10,
+      "x": -140,
+      "y": 80,
+      "value": 10,
+      "category": 2
+    },
+    {
+      "id": "SPA",
+      "name": "SPA",
+      "symbolSize": 10,
+      "x": -90,
+      "y": 90,
+      "value": 10,
+      "category": 2
+    },
+    {
+      "id": "BootStrap",
+      "name": "BootStrap",
+      "symbolSize": 15,
+      "x": -30,
+      "y": 90,
+      "value": 15,
+      "category": 2
+    },
+    {
+      "id": "AntV",
+      "name": "AntV",
+      "symbolSize": 15,
+      "x": 35,
+      "y": 85,
+      "value": 15,
+      "category": 2
+    },
+    {
+      "id": "Css",
+      "name": "Css",
+      "symbolSize": 20,
+      "x": 60,
+      "y": 55,
+      "value": 20,
+      "category": 3
+    },
+    {
+      "id": "Scss",
+      "name": "Scss",
+      "symbolSize": 10,
+      "x": 130,
+      "y": 70,
+      "value": 10,
+      "category": 4
+    },
+    {
+      "id": "Less",
+      "name": "Less",
+      "symbolSize": 10,
+      "x": 110,
+      "y": 20,
+      "value": 10,
+      "category": 4
+    },
+    {
+      "id": "JavaScript",
+      "name": "JavaScript",
+      "symbolSize": 20,
+      "x": -25,
+      "y": -25,
+      "value": 20,
+      "category": 5
+    },
+    {
+      "id": "WebGL",
+      "name": "WebGL",
+      "symbolSize": 15,
+      "x": -65,
+      "y": -75,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "WebPack",
+      "name": "WebPack",
+      "symbolSize": 15,
+      "x": -110,
+      "y": -70,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "React",
+      "name": "React",
+      "symbolSize": 15,
+      "x": -30,
+      "y": -95,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "Vue",
+      "name": "Vue",
+      "symbolSize": 15,
+      "x": 5,
+      "y": -85,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "ECharts",
+      "name": "ECharts",
+      "symbolSize": 15,
+      "x": 70,
+      "y": -50,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "Vite",
+      "name": "Vite",
+      "symbolSize": 15,
+      "x": 35,
+      "y": -60,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "jQuery",
+      "name": "jQuery",
+      "symbolSize": 15,
+      "x": 30,
+      "y": -30,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "NodeJS",
+      "name": "NodeJS",
+      "symbolSize": 15,
+      "x": -55,
+      "y": 20,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "NPM",
+      "name": "NPM",
+      "symbolSize": 15,
+      "x": -110,
+      "y": -5,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "Babel",
+      "name": "Babel",
+      "symbolSize": 15,
+      "x": -150,
+      "y": -45,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "Yarn",
+      "name": "Yarn",
+      "symbolSize": 15,
+      "x": -135,
+      "y": 30,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "VitePress",
+      "name": "VitePress",
+      "symbolSize": 15,
+      "x": 60,
+      "y": -85,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "TypeScript",
+      "name": "TypeScript",
+      "symbolSize": 15,
+      "x": 20,
+      "y": 20,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "Axios",
+      "name": "Axios",
+      "symbolSize": 15,
+      "x": 80,
+      "y": 15,
+      "value": 15,
+      "category": 6
+    },
+    {
+      "id": "Server",
+      "name": "Server",
+      "symbolSize": 25,
+      "x": 70,
+      "y": -10,
+      "value": 25,
+      "category": 7
+    },
+    {
+      "id": "Docker",
+      "name": "Docker",
+      "symbolSize": 20,
+      "x": 110,
+      "y": -65,
+      "value": 20,
+      "category": 8
+    },
+    {
+      "id": "Nginx",
+      "name": "Nginx",
+      "symbolSize": 20,
+      "x": 115,
+      "y": -25,
+      "value": 20,
+      "category": 8
+    },
+    {
+      "id": "SSR",
+      "name": "SSR",
+      "symbolSize": 20,
+      "x": 140,
+      "y": 5,
+      "value": 20,
+      "category": 8
+    },
+  ],
+  "links": [
+    {
+      "source": "Web",
+      "target": "Html"
+    },
+    {
+      "source": "Html",
+      "target": "AntV"
+    },
+    {
+      "source": "CSS",
+      "target": "AntV"
+    },
+    {
+      "source": "JavaScript",
+      "target": "AntV"
+    },
+    {
+      "source": "Html",
+      "target": "Canvas"
+    },
+    {
+      "source": "Html",
+      "target": "SPA"
+    },
+    {
+      "source": "Html",
+      "target": "BootStrap"
+    },
+    {
+      "source": "Css",
+      "target": "BootStrap"
+    },
+    {
+      "source": "Web",
+      "target": "Css"
+    },
+    {
+      "source": "Css",
+      "target": "Scss"
+    },
+    {
+      "source": "Css",
+      "target": "Less"
+    },
+    {
+      "source": "Web",
+      "target": "JavaScript"
+    },
+    {
+      "source": "JavaScript",
+      "target": "Vue"
+    },
+    {
+      "source": "JavaScript",
+      "target": "BootStrap"
+    },
+    {
+      "source": "Vue",
+      "target": "VitePress"
+    },
+    {
+      "source": "Vite",
+      "target": "VitePress"
+    },
+    {
+      "source": "JavaScript",
+      "target": "React"
+    },
+    {
+      "source": "JavaScript",
+      "target": "TypeScript"
+    },
+    {
+      "source": "JavaScript",
+      "target": "JQuery"
+    },
+    {
+      "source": "JavaScript",
+      "target": "NodeJS"
+    },
+    {
+      "source": "JavaScript",
+      "target": "NPM"
+    },
+    {
+      "source": "JavaScript",
+      "target": "Babel"
+    },
+    {
+      "source": "Babel",
+      "target": "WebPack"
+    },
+    {
+      "source": "JavaScript",
+      "target": "WebPack"
+    },
+    {
+      "source": "JavaScript",
+      "target": "WebGL"
+    },
+    {
+      "source": "JavaScript",
+      "target": "jQuery"
+    },
+    {
+      "source": "JavaScript",
+      "target": "Yarn"
+    },
+    {
+      "source": "JavaScript",
+      "target": "ECharts"
+    },
+    {
+      "source": "JavaScript",
+      "target": "Vite"
+    },
+    {
+      "source": "JavaScript",
+      "target": "Server"
+    },
+    {
+      "source": "JavaScript",
+      "target": "Axios"
+    },
+    {
+      "source": "Server",
+      "target": "Axios"
+    },
+    {
+      "source": "Server",
+      "target": "Docker"
+    },
+    {
+      "source": "Server",
+      "target": "Nginx"
+    },
+    {
+      "source": "Server",
+      "target": "SSR"
+    },
+  ],
+  "categories": [
+    {
+      "name": "A"
+    },
+    {
+      "name": "B"
+    },
+    {
+      "name": "C"
+    },
+    {
+      "name": "D"
+    },
+    {
+      "name": "E"
+    },
+    {
+      "name": "F"
+    },
+    {
+      "name": "G"
+    },
+    {
+      "name": "H"
+    },
+    {
+      "name": "I"
+    }
+  ]
+}
+
 const musicIdList = [
   "不走寻常路",
   "纽约地铁", 

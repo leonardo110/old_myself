@@ -520,14 +520,6 @@ div:hover ::-webkit-scrollbar-thumb {
   transition: 0.25s;
   backdrop-filter: blur(100px);
 }
-.customModuleRowInner {
-  margin: 0 auto;
-  position: relative;
-  width: 90%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 28.3% 40% 31.6%;
-}
 .ev-module-edit {
   display: grid;
   align-content: center;
