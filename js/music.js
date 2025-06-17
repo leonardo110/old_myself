@@ -292,7 +292,8 @@ $(function () {
     if (currIndex > 1) {
       const origin = 'https://www.hhlqilongzhu.cn/api'
       const indexMusic = musicIdList[currIndex]
-      //第一步：建立所需的对象
+      //第一步：建立所需的对象(可替代接口，暂未适配)
+      // https://www.hhlqilongzhu.cn/api/dg_kugouSQ.php?msg=%E5%91%A8%E6%9D%B0%E4%BC%A6&num=100&type=json&quality=hign&n=0
       const url = flag === 'lrc' ? `${origin}/dg_geci.php?msg=${indexMusic}&n=1&type=2` : `${origin}/dg_mgmusic_24bit.php?msg=${indexMusic}&n=1&type=json`
       let httpRequest = new XMLHttpRequest();
       //第二步：打开连接  将请求参数写在url中
