@@ -102,12 +102,8 @@
   right: 23px;
 }
 .vipIcon{
-  width: 18px;
-  vertical-align: sub;
-}
-#vipTextId{
-  font-size: 13px;
-  color: #fff;
+  width: 25px;
+  vertical-align: middle;
 }
 #track-time {
   height: 15px;

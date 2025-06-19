@@ -43,9 +43,6 @@ $(function () {
     areaDom = document.getElementById('s-area');
     barDom = document.getElementById('seek-bar');
 
-    musicIcon1 = document.querySelector('#icon1')
-    musicIcon2 = document.querySelector('#icon2')
-
   function playPause() {
     setTimeout(function () {
       if (audio.paused) {
@@ -163,7 +160,7 @@ $(function () {
 
   async function selectTrack(flag) {
     if (flag == 1) {
-      if (currIndex > musicIdList.length - 1) {
+      if (currIndex > jaychouList.length - 1) {
         currIndex = 0
       } else {
         ++currIndex;
@@ -178,7 +175,7 @@ $(function () {
         --currIndex;
         getMusicInfo('lrc')
       } else if (currIndex < 0) {
-        currIndex = musicIdList.length - 1
+        currIndex = jaychouList.length - 1
       }
     } else {
       getMusicInfo();
@@ -266,35 +263,12 @@ $(function () {
    * 调用音乐接口进行查询
    */
   function getMusicInfo(flag) {
-    let info = {}
-    if (currIndex === 0) {
-      info = {
-        title: "不走寻常路(美特斯邦威广告歌)",
-        singer: "周杰伦",
-        cover: "https://pic1.imgdb.cn/item/68302b3258cb8da5c80a2415.png",
-        music_url: "../song/不走寻常路.mp3",
-        quality: 'SQ无损'
-      }
-      handlerSong(info)
-      initLrcContent(one_lrc)
-    }
-    if (currIndex === 1) {
-      info = {
-        title: "纽约地铁(Demo Version)",
-        singer: "周杰伦",
-        cover: "https://y.qq.com/music/photo_new/T062R300x300M000003161nL4bErLd.jpg?max_age=2592000",
-        music_url: "../song/纽约地铁.mp3",
-        quality: 'SQ无损'
-      }
-      handlerSong(info)
-      initLrcContent(second_lrc)
-    }
-    if (currIndex > 1) {
       const origin = 'https://www.hhlqilongzhu.cn/api'
-      const indexMusic = musicIdList[currIndex]
+      const musicObj = jaychouList[currIndex]
       //第一步：建立所需的对象(可替代接口，暂未适配)
       // https://www.hhlqilongzhu.cn/api/dg_kugouSQ.php?msg=%E5%91%A8%E6%9D%B0%E4%BC%A6&num=100&type=json&quality=hign&n=0
-      const url = flag === 'lrc' ? `${origin}/dg_geci.php?msg=${indexMusic}&n=1&type=2` : `${origin}/dg_mgmusic_24bit.php?msg=${indexMusic}&n=1&type=json`
+      // const url = flag === 'lrc' ? `${origin}/dg_geci.php?msg=${indexMusic}&n=1&type=2` : `${origin}/dg_mgmusic_24bit.php?msg=${indexMusic}&n=1&type=json`
+      const url = `${origin}/dg_kugouSQ.php?msg=%E5%91%A8%E6%9D%B0%E4%BC%A6&&num=200&type=json&quality=hign&n=${musicObj.n}`
       let httpRequest = new XMLHttpRequest();
       //第二步：打开连接  将请求参数写在url中
       httpRequest.open(
@@ -306,23 +280,17 @@ $(function () {
         if (httpRequest.readyState === 4) {
           if (httpRequest.status === 200) {
             var json = httpRequest.responseText; //获取到json字符串，还需解析
-            if (!flag) {
-              var parseJson = JSON.parse(json);
-              handlerSong(parseJson)
-              getMusicInfo('lrc')
-            } else {
-              initLrcContent(json)
-            }
+            var parseJson = JSON.parse(json);
+            handlerSong(parseJson)
           }
         }
       };
       //第三步：发送请求
       httpRequest.send(null);
-    }
   }
 
   function handlerSong(songInfo) {
-    const { title, singer, cover, music_url, quality } = songInfo;
+    const { title, singer, cover, music_url, quality, lyrics } = songInfo;
     // 歌名
     let str = title;
     if (title.indexOf(" (") !== -1) {
@@ -330,15 +298,6 @@ $(function () {
     } else if (title.indexOf("(") !== -1) {
       str = title.split("(")[0];
     }
-    musicIcon1.style.display = 'none'
-    musicIcon2.style.display = 'none'
-    // HQ高品质、SQ无损、24bit至臻
-    if (quality.indexOf('24bit') !== -1) {
-      musicIcon1.style.display = 'inline-block'
-    } else {
-      musicIcon2.style.display = 'inline-block'
-    }
-    document.querySelector('#vipTextId').innerHTML = quality + '音质'
     albums.push(str);
     // 歌名 - 作者
     trackNames.push(title + " - " + singer);
@@ -346,6 +305,8 @@ $(function () {
     albumArtworks.push(cover);
     // 地址
     trackUrl.push(music_url);
+
+    initLrcContent(lyrics)
   }
 
   function initLrcContent (lrc) {

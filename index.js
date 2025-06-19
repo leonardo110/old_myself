@@ -1,5 +1,5 @@
 setTimeout(() => {
-  console.clear();
+  // console.clear();
   var e = "%c";
   var n =
     "color:#ffb501;text-shadow:5px 5px 2px #fff, 5px 5px 2px #373E40, 5px 5px 5px #A2B4BA, 5px 5px 10px #82ABBA;font-weight:bolder;font-size:50px";

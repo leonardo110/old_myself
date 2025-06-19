@@ -661,23 +661,6 @@ body {
   font-size: 0;
   transition: 0.25s;
 }
-#logoIcon,
-#logoContent {
-  display: inline-block;
-  height: 45px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: left center;
-  transition: 0.25s;
-  width: 200px;
-}
-#logoIcon {
-  width: 45px;
-  height: 45px;
-  background: url("./img/Qimg.svg") no-repeat;
-  border-radius: 6px;
-  vertical-align: middle;
-}
 .quancy {
   border-radius: 6px;
   width: 100%;
