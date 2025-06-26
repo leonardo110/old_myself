@@ -5,7 +5,6 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
   vertical-align: middle;
 }
 .chartsWrapper {
@@ -674,6 +673,8 @@ body {
   padding-left: 10px;
   position: absolute;
   line-height: 45px;
+  display: inline-block;
+  width: 200px;
 }
 #moreBtn {
   cursor: pointer;

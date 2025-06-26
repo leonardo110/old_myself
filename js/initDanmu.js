@@ -72,6 +72,7 @@ function invokeApi(flag, method, url, data) {
           if (flag === 'init') {
             initMsgLst = msgList
             initManager()
+            addEvent()
             initDanmuDom(msgList)
           } else {
             newMsgLst = [...msgList].filter((item) => {
@@ -146,6 +147,37 @@ function sendEmailNew() {
   httpRequest.send(JSON.stringify(data));
 }
 
+function getIpInfo() {
+    const url = 'https://api.vvhan.com/api/ipInfo'
+    let httpRequest = new XMLHttpRequest();
+    //第二步：打开连接  将请求参数写在url中
+    httpRequest.open(
+      "GET",
+      url,
+      false
+    );
+    httpRequest.onreadystatechange = async function () {
+      if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+          var json = httpRequest.responseText; //获取到json字符串，还需解析
+          var parseJson = JSON.parse(json);
+          const {ip, info} = parseJson
+          if (ip.includes('59.82.21')) {
+            Swal.fire({
+              width: 650,
+              title: '提示',
+              text: `这位${info.city}的网友，每天浏览我网站十几次，也不留言，不厚道吧？`,
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            });
+          }
+        }
+      }
+    };
+    //第三步：发送请求
+    httpRequest.send(null);
+}
+
 // 创建一个观察器实例
 const observer = new MutationObserver((mutations) => {
   mutations.forEach(async(mutation) => {
@@ -169,19 +201,19 @@ var intervalFunc = setInterval(() => {
       observeFunc(targetNode)
       clearInterval(intervalFunc)
   }
+  // getIpInfo()
 }, 3000);
 
-document.addEventListener('DOMContentLoaded', function() {
+
+function addEvent() {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
-      console.log('freeze...')
       manager.freeze();
     } else {
-      console.log('unfreeze...')
       manager.unfreeze();
     }
   });
-})
+}
 
 function observeFunc(targetNode) {
   // 配置观察选项

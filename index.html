@@ -43,7 +43,7 @@
           <span id="navMenuDiv">
             <span id="logoContent">
               <img src="./img/Normal/avatar.png" class="avator-class" alt="权朝阳/quancy.cn">
-              <span style="margin-left: -12px;vertical-align: middle;"><span style="color: #4cd84f;">Q</span>uanCY</span>
+              <span style="vertical-align: middle;"><span style="color: #4cd84f;">Q</span>uanCY</span>
             </span>
             <h1 style="text-indent: -9999px">权朝阳/quancy.cn</h1>
           </span>
@@ -294,7 +294,7 @@
         </div>
         <div>
           <p>日常兴趣</p>
-          <a id="openDialog">《七阶魔方的复原~》</a><br/>
+          <a id="openDialog">《七阶魔方的复原》</a><br/>
         </div>
         <div>
           <p>与我联系</p>
@@ -309,8 +309,10 @@
       <div id="busuanzi_container_site_pv">
         <div id="contributionBox">
           <span class="contributionAutor">网站贡献：</span>
+          <span id="footer-contribution">
             <img src="https://pic1.imgdb.cn/item/683029f058cb8da5c80a235c.png" class="contributionImg" title="池佳伟" alt="池佳伟">
             <img src="https://pic1.imgdb.cn/item/683029f058cb8da5c80a235d.png" class="contributionImg" title="田江龙" alt="田江龙">
+          </span>
         </div>
         <span class="busuanzispan">&nbsp;本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
         |<span class="busuanzispan">&nbsp;访客数 <span id="busuanzi_value_site_uv"></span> 人次</span>
@@ -378,6 +380,10 @@
       setTimeout(() => {
         const openDom = document.getElementById('openDialog');
         openDom.addEventListener('click', () => {
+          // 如果有音乐播放，则暂停
+          if (!audio.paused) {
+            audio.pause();
+          }
           Swal.fire({
             width: '50%',
             title: `<div style="text-align: 'left'">记录一次七阶魔方的复原~</div>`,
@@ -389,7 +395,9 @@
                 </div>
               </div>
             `,
-            confirmButtonText: '关闭',
+            confirmButtonText: '不想看了~',
+            allowOutsideClick: false,
+            allowEscapeKey: false
           });
         })
       }, 0);

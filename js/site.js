@@ -1,28 +1,38 @@
-document.getElementById("scrollDownIcon").onclick = () => {
-  document.body.scrollTop = document.getElementById("skill").offsetTop - 100;
+function getDomById(name) {
+  return document.getElementById(name)
+}
+
+getDomById("scrollDownIcon").onclick = () => {
+  document.body.scrollTop = getDomById("skill").offsetTop - 100;
 };
-document.getElementById("aboutText").onclick = () => {
+
+getDomById("aboutText").onclick = () => {
   document.body.scrollTop =
     document.getElementsByClassName("like-card")[0].offsetTop - 100;
 };
-document.getElementById("footmarkText").onclick = () => {
+
+getDomById("footmarkText").onclick = () => {
   document.body.scrollTop =
     document.getElementsByClassName("mapMark")[0].offsetTop - 100;
 };
-document.getElementById("favorite").onclick = () => {
+
+getDomById("favorite").onclick = () => {
   document.body.scrollTop =
     document.getElementsByClassName("like-card")[1].offsetTop - 100;
 };
-document.getElementById("msgText").onclick = () => {
+
+getDomById("msgText").onclick = () => {
   document.body.scrollTop =
     document.getElementsByClassName("walineDiv")[0].offsetTop - 100;
 };
-document.getElementById("logText").onclick = () => {
+
+getDomById("logText").onclick = () => {
   document.body.scrollTop =
-    document.getElementById("chronicles").offsetTop - 200;
+    getDomById("chronicles").offsetTop - 200;
 };
-document.getElementById("contributionBox").onmouseenter = () => {
-  const domList = document.querySelectorAll("#contributionBox img");
+
+getDomById("footer-contribution").onmouseenter = () => {
+  const domList = document.querySelectorAll("#footer-contribution img");
   domList.forEach((dom) => {
     dom.removeAttribute("contributionImg");
     dom.setAttribute("class", "intervalCss");
@@ -33,52 +43,52 @@ document.getElementById("contributionBox").onmouseenter = () => {
     });
   }, 150);
 };
-document.getElementById("contributionBox").onmouseleave = () => {
-  const domList = document.querySelectorAll("#contributionBox img");
+
+getDomById("footer-contribution").onmouseleave = () => {
+  const domList = document.querySelectorAll("#footer-contribution img");
   domList.forEach((dom) => {
     dom.removeAttribute("intervalCss");
     dom.setAttribute("class", "contributionImg");
     dom.style["margin-right"] = "-15px";
   });
 };
-document.getElementById("jay").onclick = () => {
+
+getDomById("jay").onclick = () => {
   window.open("https://baike.baidu.com/item/周杰伦/129156", "_blank");
 };
-document.getElementById("cr7").onclick = () => {
+
+getDomById("cr7").onclick = () => {
   window.open(
     "https://baike.baidu.com/item/克里斯蒂亚诺·罗纳尔多/4510104",
     "_blank"
   );
 };
-document.getElementById("marvel").onclick = () => {
+
+getDomById("marvel").onclick = () => {
   window.open("https://baike.baidu.com/item/漫威", "_blank");
 };
-document.getElementById("DC").onclick = () => {
+
+getDomById("DC").onclick = () => {
   window.open("https://baike.baidu.com/item/DC漫画", "_blank");
 };
-document.getElementById("mailId").onclick = () => {
+
+getDomById("mailId").onclick = () => {
   window.open("mailto:jaychou_master@163.com");
 };
+
 document.querySelector('#copyright p b').innerText = `©${new Date().getFullYear()} 权朝阳`
+
 setTimeout(() => {
-  let cardDomList = document.getElementsByClassName("firstCard");
-  let dom = "";
-  for (let x = 0; x < cardDomList.length; x++) {
-    dom = cardDomList[x];
-    dom.onmouseenter = (e) => {
-      const cardDom = document.getElementById("cardText");
-      cardDom.innerText = cardDescList[x];
-    };
-  }
   const logDom = document.querySelector('#chronicles-container')
   logDom.scrollLeft = logDom.scrollWidth
 }, 0);
+
 window.addEventListener("scroll", function scrollLoadMore() {
   let scrollTop = document.body.scrollTop; //滚动上去隐藏部分的高度
   if (scrollTop > 0) {
-    document.getElementById("navTopMenu").style.backdropFilter = "blur(100px)";
+    getDomById("navTopMenu").style.backdropFilter = "blur(100px)";
   } else {
-    document.getElementById("navTopMenu").style.backdropFilter = "";
+    getDomById("navTopMenu").style.backdropFilter = "";
   }
 });
 
@@ -86,15 +96,16 @@ setTimeout(() => {
   const loaderStyle = document.getElementsByClassName("loader")[0].style;
   loaderStyle.opacity = 0;
   loaderStyle.height = "0px";
-  document.getElementById("contentPage").style.opacity = 1;
+  getDomById("contentPage").style.opacity = 1;
 }, 3000);
 
 // 生成随机数
 function getRandom(min, max) {
   return Math.random() * (max - min) + min;
 }
+
 function date() {
-  var shower = document.getElementById("sitTip"); //不断获取新的被输出的数据
+  var shower = getDomById("sitTip"); //不断获取新的被输出的数据
   var subtime = (Date.now() - new Date("2023-06-09 12:00:00")) / 1000; //计算时间差,并将毫秒转化为秒
   var days = parseInt(subtime / 86400); //天  24*60*60*1000
   var hours = fillZero(parseInt(subtime / 3600) - 24 * days); //小时  60*60  总小时数-过去小时数=现在小时数
@@ -104,10 +115,12 @@ function date() {
     "已悄悄运行：" + days + "天" + hours + "小时" + mins + "分" + secs + "秒";
   shower.innerHTML = timer; //输入自己规定的形式的数据
 }
+
 function fillZero(num) {
   let numStr = num + "";
   return numStr.length === 1 ? "0" + numStr : numStr;
 }
+
 function chaju(date1, date2) {
   //建立一个方法来进行计算
   var time1 = Date.parse(date1); //将日期转换成毫秒值
@@ -115,6 +128,7 @@ function chaju(date1, date2) {
   var time3 = time2 - time1; //毫秒值进行计算
   return time3;
 }
+
 setInterval(function () {
   date();
 }, 1000);
