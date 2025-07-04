@@ -8,10 +8,10 @@ setTimeout(() => {
   console.info(e + "总有一些你没聆听过的音乐秘密在等待着你。\r\n\r\n", musicLogCss);
 }, 3000);
 
-window.oncontextmenu = function (event) {
-  event.preventDefault();
-  return false;
-};
+// window.oncontextmenu = function (event) {
+//   event.preventDefault();
+//   return false;
+// };
 
 // var h = window.screen.height,w=window.screen.width;
 // window.onresize = function () {

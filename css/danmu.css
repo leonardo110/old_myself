@@ -14,20 +14,20 @@
 .danmu-body-new{
     color: #fff;
     font-size: 20px;
-    background: linear-gradient(-20deg, rgb(183, 33, 255) 0%, rgb(33, 212, 253) 100%);
+    background: linear-gradient(to right, rgb(33, 212, 253), transparent);
     background-size: 100% 125%;
-    padding: 15px 20px;
+    padding: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border-radius: 30px;
+    border-radius: 40px;
     max-width: 380px;
-    box-shadow: 1px 1px 5px #c88dff;
+    /* box-shadow: 1px 1px 5px rgb(33, 212, 253); */
 }
 
 .danmu-body-new img {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
 }
 
 .danmu-body img {

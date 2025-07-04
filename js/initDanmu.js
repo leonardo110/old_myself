@@ -1,6 +1,3 @@
-// 初始化的评论
-let initMsgLst = []
-
 // 新提交的评论（仅限新提交的）
 let newMsgLst = []
 
@@ -47,11 +44,15 @@ function initManager() {
 }
 
 function initDanmuDom(list) {
-    for (let index = 1; index < list.length; index++) {
+    for (let index = 0; index < list.length; index++) {
         const item = list[index];
         const { avatar, nick, type, orig } = item
         if (type !== "administrator") {
-          manager.push(`${avatar}-${nick}-${orig}`);
+          let str = `${avatar}-${nick}-${orig}`
+          if (index === 0) {
+            str+='-new'
+          }
+          manager.push(str);
         }
     }
 }
@@ -70,7 +71,6 @@ function invokeApi(flag, method, url, data) {
           var json = httpRequest.responseText; //获取到json字符串，还需解析
           const msgList = JSON.parse(json).data
           if (flag === 'init') {
-            initMsgLst = msgList
             initManager()
             addEvent()
             initDanmuDom(msgList)
@@ -87,19 +87,6 @@ function invokeApi(flag, method, url, data) {
     //第三步：发送请求
     httpRequest.send(data || null);
 }
-
-let count = 0
-window.addEventListener("scroll", function scrollLoadMore() {
-  let scrollTop = document.body.scrollTop; //滚动上去隐藏部分的高度
-  const scrollHeight = document.getElementById("skill").scrollHeight;
-  if (scrollTop > scrollHeight) {
-    if (count === 0) {
-      count++
-      // 查询前30条留言
-      invokeApi('init', 'get', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
-    }
-  }
-});
 
 /**
  * 发送邮件、弹幕
@@ -147,37 +134,6 @@ function sendEmailNew() {
   httpRequest.send(JSON.stringify(data));
 }
 
-function getIpInfo() {
-    const url = 'https://api.vvhan.com/api/ipInfo'
-    let httpRequest = new XMLHttpRequest();
-    //第二步：打开连接  将请求参数写在url中
-    httpRequest.open(
-      "GET",
-      url,
-      false
-    );
-    httpRequest.onreadystatechange = async function () {
-      if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
-          var json = httpRequest.responseText; //获取到json字符串，还需解析
-          var parseJson = JSON.parse(json);
-          const {ip, info} = parseJson
-          if (ip.includes('59.82.21')) {
-            Swal.fire({
-              width: 650,
-              title: '提示',
-              text: `这位${info.city}的网友，每天浏览我网站十几次，也不留言，不厚道吧？`,
-              allowOutsideClick: false,
-              allowEscapeKey: false
-            });
-          }
-        }
-      }
-    };
-    //第三步：发送请求
-    httpRequest.send(null);
-}
-
 // 创建一个观察器实例
 const observer = new MutationObserver((mutations) => {
   mutations.forEach(async(mutation) => {
@@ -187,7 +143,7 @@ const observer = new MutationObserver((mutations) => {
           console.log('send email...')
           const srcUrl = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-user img').src
           if (!srcUrl.includes('pic.imgdb.cn')) {
-              await invokeApi('new', 'get', `https://msgboard.site/comment?path=%2F&pageSize=2&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
+              await invokeApi('new', 'get', `https://msgboard.site/comment?path=%2F&pageSize=1&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
               sendEmailNew()
           }
       }
@@ -201,7 +157,6 @@ var intervalFunc = setInterval(() => {
       observeFunc(targetNode)
       clearInterval(intervalFunc)
   }
-  // getIpInfo()
 }, 3000);
 
 
@@ -226,3 +181,8 @@ function observeFunc(targetNode) {
   console.log('start observe...')
   observer.observe(targetNode, config);
 }
+
+setTimeout(() => {
+  // 查询前30条留言
+  invokeApi('init', 'get', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
+}, 2000);

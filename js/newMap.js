@@ -360,6 +360,17 @@ const option = {
                 borderWidth: 1.5, // 边缘发光宽度
             },
         },
+        regions: [
+            {
+               name: '南海诸岛',
+               emphasis: {
+                  disabled: true
+               },
+               itemStyle: {
+                  borderWidth: 1
+               }
+            }
+         ]
     },
     series: series,
 };
