@@ -168,6 +168,25 @@ function addEvent() {
       manager.unfreeze();
     }
   });
+  const zoomNum = window.devicePixelRatio;
+  if (zoomNum !== 1) {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      top: '100px',
+      showConfirmButton: false,
+      timer: 5000,
+      timerProgressBar: false,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: 'info',
+      title: "请将浏览器缩放至100%以获得最佳体验~"
+    });
+  }
 }
 
 function observeFunc(targetNode) {

@@ -357,20 +357,9 @@ const option = {
                 label: { show: true, color: '#fff' },
                 borderColor: '#2791ff', // 边界线白色
                 areaColor: 'transparent', // 区域颜色，可根据需要设置
-                borderWidth: 1.5, // 边缘发光宽度
+                borderWidth: 1.8, // 边缘发光宽度
             },
         },
-        regions: [
-            {
-               name: '南海诸岛',
-               emphasis: {
-                  disabled: true
-               },
-               itemStyle: {
-                  borderWidth: 1
-               }
-            }
-         ]
     },
     series: series,
 };
