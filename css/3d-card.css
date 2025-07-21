@@ -8,12 +8,12 @@
 }
 
 .card-list {
-  display: flex;
-  /* grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, 1fr); */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 15px;
   margin-top: 120px;
-  flex-flow: row wrap;
+  /* flex-flow: row wrap; */
 }
 .like-card {
   height: calc(100vh - 100px);

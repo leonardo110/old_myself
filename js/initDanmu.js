@@ -175,7 +175,7 @@ function addEvent() {
       position: "top-end",
       top: '100px',
       showConfirmButton: false,
-      timer: 5000,
+      timer: 5500,
       timerProgressBar: false,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -184,7 +184,7 @@ function addEvent() {
     });
     Toast.fire({
       icon: 'info',
-      title: "请将浏览器缩放至100%以获得最佳体验~"
+      title: "请将浏览器缩放至100%后重新刷新页面以获得最佳体验~"
     });
   }
 }
@@ -203,5 +203,5 @@ function observeFunc(targetNode) {
 
 setTimeout(() => {
   // 查询前30条留言
-  invokeApi('init', 'get', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
+  invokeApi('init', 'get', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`, true)
 }, 2000);

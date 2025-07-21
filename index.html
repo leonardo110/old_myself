@@ -320,7 +320,6 @@
         <!-- <span class="busuanzispan">总阅读量 <span id="busuanzi_value_page_pv"></span> 次</span> -->
       </div>
     </div>
-    <script src="./js/busuanzi.js"></script>
     <script src="./js/require.js"></script>
     <script src="./js/nebulon.js"></script>
     <script src="./js/constant.js"></script>
@@ -375,7 +374,7 @@
       document.getElementsByClassName('wl-power')[0].style.display = 'none'
       document.querySelector(".wl-actions a").style.display = 'none'
     </script>
-    <script>
+    <script defer>
       // 弹窗
       setTimeout(() => {
         const openDom = document.getElementById('openDialog');
@@ -395,7 +394,7 @@
                 </div>
               </div>
             `,
-            confirmButtonText: '不想看了~',
+            confirmButtonText: '关闭',
             allowOutsideClick: false,
             allowEscapeKey: false
           });
@@ -403,5 +402,6 @@
       }, 0);
     </script>
     <script src="./js/initDanmu.js"></script>
+    <script defer src="./js/busuanzi.js"></script>
   </body>
 </html>
