@@ -263,11 +263,10 @@ $(function () {
    * 调用音乐接口进行查询
    */
   function getMusicInfo(flag) {
-      const origin = 'https://www.hhlqilongzhu.cn/api'
+      const origin = 'https://sdkapi.hhlqilongzhu.cn/api'
       const musicObj = jaychouList[currIndex]
-      //第一步：建立所需的对象(可替代接口，暂未适配)
-      // https://www.hhlqilongzhu.cn/api/dg_kugouSQ.php?msg=%E5%91%A8%E6%9D%B0%E4%BC%A6&num=100&type=json&quality=hign&n=0
-      const url = `${origin}/dg_kugouSQ.php?msg=周杰伦&type=json&quality=hign&n=${musicObj.n}`
+      //第一步：建立所需的对象
+      const url = `${origin}/dgMusic_kugou/?key=Dragon83995041ADF0275548A7E88A66201838&msg=周杰伦&type=json&quality=hign&n=${musicObj.n}`
       let httpRequest = new XMLHttpRequest();
       //第二步：打开连接  将请求参数写在url中
       httpRequest.open(
