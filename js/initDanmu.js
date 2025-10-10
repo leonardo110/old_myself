@@ -134,6 +134,14 @@ function sendEmailNew() {
   httpRequest.send(JSON.stringify(data));
 }
 
+function addAlt() {
+  const itemList = document.querySelectorAll('.wl-reaction-img img');
+  for (let index = 0; index < itemList.length; index++) {
+      let itemDom = itemList[index];
+      itemDom.setAttribute('alt', '表情');
+  }
+}
+
 // 创建一个观察器实例
 const observer = new MutationObserver((mutations) => {
   mutations.forEach(async(mutation) => {
@@ -154,6 +162,7 @@ const observer = new MutationObserver((mutations) => {
 var intervalFunc = setInterval(() => {
   const targetNode = document.querySelector('.wl-num');
   if (targetNode) {
+      addAlt() // SEO优化
       observeFunc(targetNode)
       clearInterval(intervalFunc)
   }
