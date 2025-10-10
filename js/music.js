@@ -178,7 +178,7 @@ $(function () {
         currIndex = jaychouList.length - 1
       }
     } else {
-      getMusicInfo();
+      await getMusicInfo();
     }
 
     if (currIndex > -1) {
@@ -221,10 +221,10 @@ $(function () {
     }
   }
 
-  function initPlayer() {
+  async function initPlayer() {
     audio = new Audio();
 
-    selectTrack(0);
+    await selectTrack(0);
 
     audio.loop = false;
 
@@ -262,29 +262,25 @@ $(function () {
   /**
    * 调用音乐接口进行查询
    */
-  function getMusicInfo(flag) {
+  async function getMusicInfo() {
       const origin = 'https://sdkapi.hhlqilongzhu.cn/api'
       const musicObj = jaychouList[currIndex]
       //第一步：建立所需的对象
       const url = `${origin}/dgMusic_kugou/?key=Dragon83995041ADF0275548A7E88A66201838&msg=周杰伦&type=json&quality=hign&n=${musicObj.n}`
-      let httpRequest = new XMLHttpRequest();
-      //第二步：打开连接  将请求参数写在url中
-      httpRequest.open(
-        "GET",
-        url,
-        false
-      );
-      httpRequest.onreadystatechange = async function () {
-        if (httpRequest.readyState === 4) {
-          if (httpRequest.status === 200) {
-            var json = httpRequest.responseText; //获取到json字符串，还需解析
-            var parseJson = JSON.parse(json);
-            handlerSong(parseJson)
-          }
+      // 使用fetch原生API调用接口
+      await fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('网络响应不正常');
         }
-      };
-      //第三步：发送请求
-      httpRequest.send(null);
+        return response.json(); // 解析为JSON
+      })
+      .then(data => {
+        handlerSong(data)
+      })
+      .catch(error => {
+        console.error('请求失败:', error);
+      });
   }
 
   function handlerSong(songInfo) {
@@ -300,6 +296,7 @@ $(function () {
     // 歌名 - 作者
     trackNames.push(title + " - " + singer);
     // 封面
+    // let newCover = cover.replace('http://', 'https://')
     albumArtworks.push(cover);
     // 地址
     trackUrl.push(music_url);

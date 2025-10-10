@@ -8,8 +8,8 @@
   vertical-align: middle;
 }
 .chartsWrapper {
-  width: 65%;
-  height: calc(100% - 100px);
+  width: 65vw;
+  height: calc(92vh - 100px);
   margin: 0px auto 0;
   backdrop-filter: blur(100px) !important;
   background-color: transparent !important;

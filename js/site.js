@@ -97,7 +97,7 @@ setTimeout(() => {
   loaderStyle.opacity = 0;
   loaderStyle.height = "0px";
   getDomById("contentPage").style.opacity = 1;
-}, 3000);
+}, 1500);
 
 // 生成随机数
 function getRandom(min, max) {

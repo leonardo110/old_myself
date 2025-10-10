@@ -1,9 +1,13 @@
+<!-- <!DOCTYPE html> -->
 <html lang="cn">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="./img/Normal/Q.svg"/>
     <link rel="stylesheet" href="./css/loading.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://quancy.cn/" />
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval';img-src * blob: data:">
     <meta name="description" content="权朝阳的个人网站/quancy.cn" />
     <meta data-react-helmet="true" name="keywords" content="权朝阳的个人网站/quancy.cn">
     <script>
@@ -37,12 +41,11 @@
       <div id="myselfGroundImg">
         <div id="container"></div>
       </div>
-      <!-- 导航 -->
-      <section style="height: 100vh;">
+      <header>
         <div id="navTopMenu">
           <span id="navMenuDiv">
             <span id="logoContent">
-              <img src="./img/Normal/avatar.png" class="avator-class" alt="权朝阳/quancy.cn">
+              <img src="./img/Normal/avatar.png" class="avator-class" alt="权朝阳">
               <span style="vertical-align: middle;"><span style="color: #4cd84f;">Q</span>uanCY</span>
             </span>
             <h1 style="text-indent: -9999px">权朝阳/quancy.cn</h1>
@@ -56,232 +59,237 @@
             <a class="hrefText" id="msgText">留言</a>
           </nav>
         </div>
-        <div id="topTitle">
-          <div id="matrix">
-            <span>E=mc<sup>2</sup></span>
+      </header>
+      <main>
+        <!-- 导航 -->
+        <section style="height: 100vh;">
+          <div id="topTitle">
+            <div id="matrix">
+              <span>E=mc<sup>2</sup></span>
+            </div>
+            <span class="myselfCss">
+              <span class="lineOrange"></span>
+            </span>
           </div>
-          <span class="myselfCss">
-            <span class="lineOrange"></span>
-          </span>
-        </div>
-        <div id="scrollDown"><span id="scrollDownIcon"></span></div>
-      </section>
-      <!-- 技能 -->
-      <section>
-        <div id="skill">
-          <div style="backdrop-filter: blur(100px) !important;padding: 40px;">
-            <div class='chartsWrapper' id='link'></div>
+          <div id="scrollDown"><span id="scrollDownIcon"></span></div>
+        </section>
+        <!-- 技能 -->
+        <section>
+          <div id="skill">
+            <div style="backdrop-filter: blur(100px) !important;padding: 40px;">
+              <div class='chartsWrapper' id='link'></div>
+            </div>
           </div>
-        </div>
-      </section>
-      <!-- 印象 -->
-      <section class="like-card">
-        <div class="musicBody">
-          <div class="musicDiv" id="musicId">
-            <div id="app-cover">
-              <div id="player">
-                <div id="player-track" class="active">
-                  <span id="album-name"></span>
-                  <span class="qualityCss">
-                    <img src="./img/Normal/hi-res.jpg" class="vipIcon" alt="权朝阳/quancy.cn">
-                  </span>
-                  <div id="track-name"></div>
-                  <div id="track-time" class="active">
-                    <div id="current-time"></div>
-                    <div id="track-length"></div>
+        </section>
+        <!-- 印象 -->
+        <section class="like-card">
+          <div class="musicBody">
+            <div class="musicDiv" id="musicId">
+              <div id="app-cover">
+                <div id="player">
+                  <div id="player-track" class="active">
+                    <span id="album-name"></span>
+                    <span class="qualityCss">
+                      <img src="./img/Normal/hi-res.jpg" class="vipIcon" alt="权朝阳/quancy.cn">
+                    </span>
+                    <div id="track-name"></div>
+                    <div id="track-time" class="active">
+                      <div id="current-time"></div>
+                      <div id="track-length"></div>
+                    </div>
+                    <div id="s-area">
+                      <div id="ins-time"></div>
+                      <div id="s-hover"></div>
+                      <div id="seek-bar" style="width: 0px"></div>
+                    </div>
                   </div>
-                  <div id="s-area">
-                    <div id="ins-time"></div>
-                    <div id="s-hover"></div>
-                    <div id="seek-bar" style="width: 0px"></div>
+                  <div id="player-content">
+                    <div id="album-art" class="">
+                      <img src="" class="active" id="musicPic" alt="权朝阳/quancy.cn"/>
+                    </div>
+                    <div class="containerLrc">
+                      <ul class="wordList">
+                      </ul>
+                    </div>
+                    <div id="player-controls">
+                      <div class="control">
+                        <div class="button" id="play-previous">
+                          <i class="fas fa-backward"></i>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <div class="button" id="play-pause-button">
+                          <i class="fa fa-play"></i>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <div class="button" id="play-next">
+                          <i class="fas fa-forward"></i>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div id="player-content">
-                  <div id="album-art" class="">
-                    <img src="" class="active" id="musicPic" alt="权朝阳/quancy.cn"/>
-                  </div>
-                  <div class="containerLrc">
-                    <ul class="wordList">
-                    </ul>
-                  </div>
-                  <div id="player-controls">
-                    <div class="control">
-                      <div class="button" id="play-previous">
-                        <i class="fas fa-backward"></i>
-                      </div>
-                    </div>
-                    <div class="control">
-                      <div class="button" id="play-pause-button">
-                        <i class="fa fa-play"></i>
-                      </div>
-                    </div>
-                    <div class="control">
-                      <div class="button" id="play-next">
-                        <i class="fas fa-forward"></i>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+            <div id="tagContent">
+              <h3 id="myselfDiv">印象</h3>
+              <span class="lineBottom"></span>
+              <div class="curTag">
+                <span>90后</span><span>秦人</span><span>电影</span><span>音乐</span>
+              </div>
+              <div class="curTag">
+                <span id="jay">Jay</span><span id="cr7">CR7</span>
+              </div>
+              <div class="curTag">
+                <span id="marvel">Marvel</span><span>悬疑</span><span id="DC">DC</span>
+              </div>
+              <div class="curTag"><span>理科生</span></div>
+              <div class="curTag"><span>业余魔方爱好者</span></div>
+            </div>
+          </div>
+        </section>
+        <!-- 绿洲 -->
+        <section class="like-card">
+          <div class="musicBody">
+            <div class="favorite-body">
+              <div class="ev-module-edit">
+                <div class="ev-module-edit-box1">
+                  <strong>Oasis</strong>
+                </div>
+                <div class="ev-module-edit-box2"></div>
+                <div class="ev-module-edit-box3">
+                  <strong>绿洲</strong>
+                </div>
+              </div>
+              <div class="card-list">
+                <div class="book-card">
+                  <img src="./img/Watch-Men/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Watch-Men/logo.png" class="title" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Watch-Men/men.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/Three-Body/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Three-Body/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Three-Body/body.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/Vendetta/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Vendetta/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Vendetta/vendetta.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/Hacker/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Hacker/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Hacker/hacker.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/Harry-Potter/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Harry-Potter/logo.png" class="title" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Harry-Potter/harry.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/Alien/bottom.jpg" class="cover" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Alien/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Alien/alien.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/Predator/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Predator/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Predator/predator.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/Ring/bottom.png" class="cover" alt="权朝阳/quancy.cn" />
+                  <img src="./img/Ring/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
+                  <img src="./img/Ring/ring.png" class="hero" alt="权朝阳/quancy.cn"/>
+                </div>
+                <div class="book-card">
+                  <img src="./img/BatMan/bottom.png" class="cover" alt="权朝阳/quancy.cn" />
+                  <img src="./img/BatMan/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn" />
+                  <img src="./img/BatMan/joker.png" class="hero" alt="权朝阳/quancy.cn" />
+                </div>
+                <div class="book-card">
+                  <img src="./img/Green/bottom.png" class="cover" alt="权朝阳/quancy.cn" />
+                  <img src="./img/Green/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn" />
+                  <img src="./img/Green/green.png" class="hero" alt="权朝阳/quancy.cn" />
                 </div>
               </div>
             </div>
           </div>
-          <div id="tagContent">
-            <h3 id="myselfDiv">印象</h3>
-            <span class="lineBottom"></span>
-            <div class="curTag">
-              <span>90后</span><span>秦人</span><span>电影</span><span>音乐</span>
-            </div>
-            <div class="curTag">
-              <span id="jay">Jay</span><span id="cr7">CR7</span>
-            </div>
-            <div class="curTag">
-              <span id="marvel">Marvel</span><span>悬疑</span><span id="DC">DC</span>
-            </div>
-            <div class="curTag"><span>理科生</span></div>
-            <div class="curTag"><span>业余魔方爱好者</span></div>
+        </section>
+        <!-- 地图 -->
+        <section>
+          <div style="backdrop-filter: blur(100px) !important;padding: 40px;" class="mapMark">
+            <div class='chartsWrapper' id='map'></div>
+            <div class="mapBlank"></div>
           </div>
-        </div>
-      </section>
-      <!-- 绿洲 -->
-      <section class="like-card">
-        <div class="musicBody">
-          <div class="favorite-body">
-            <div class="ev-module-edit">
-              <div class="ev-module-edit-box1">
-                <strong>Oasis</strong>
+        </section>
+        <!-- 时间线 -->
+        <div id="chronicles">
+          <h3>迭代时间线</h3>
+          <span class="divLine"></span>
+          <p id="sitTip"></p>
+          <div class="chronicles-container-wrapper">
+            <div id="chronicles-container">
+              <div>
+                <p class="chronicles-child-lineTime">2023-05-21</p>
+                <p class="chronicles-child-body">注册「quancy.cn」域名</p>
               </div>
-              <div class="ev-module-edit-box2"></div>
-              <div class="ev-module-edit-box3">
-                <strong>绿洲</strong>
+              <div>
+                <p class="chronicles-child-lineTime">2023-06-09</p>
+                <p class="chronicles-child-body">网站初版v1.0页面上线</p>
               </div>
-            </div>
-            <div class="card-list">
-              <div class="book-card">
-                <img src="./img/Watch-Men/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Watch-Men/logo.png" class="title" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Watch-Men/men.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2023-09-19</p>
+                <p class="chronicles-child-body">网站使用2D WebGL渲染背景</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Three-Body/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Three-Body/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Three-Body/body.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2023-10-08</p>
+                <p class="chronicles-child-body">网站新增音乐模块</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Vendetta/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Vendetta/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Vendetta/vendetta.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2023-10-19</p>
+                <p class="chronicles-child-body">网站新增留言板模块</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Hacker/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Hacker/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Hacker/hacker.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2023-11-07</p>
+                <p class="chronicles-child-body">网站进行ICP备案</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Harry-Potter/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Harry-Potter/logo.png" class="title" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Harry-Potter/harry.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2023-11-28</p>
+                <p class="chronicles-child-body">网站使用全新UI界面2.0</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Alien/bottom.jpg" class="cover" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Alien/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Alien/alien.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2024-10-18</p>
+                <p class="chronicles-child-body">网站新增个人旅游足迹</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Predator/bottom.png" class="cover" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Predator/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Predator/predator.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2025-03-05</p>
+                <p class="chronicles-child-body">网站新增绿洲模块</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Ring/bottom.png" class="cover" alt="权朝阳/quancy.cn" />
-                <img src="./img/Ring/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn"/>
-                <img src="./img/Ring/ring.png" class="hero" alt="权朝阳/quancy.cn"/>
+              <div>
+                <p class="chronicles-child-lineTime">2025-05-20</p>
+                <p class="chronicles-child-body">网站新增弹幕功能</p>
               </div>
-              <div class="book-card">
-                <img src="./img/BatMan/bottom.png" class="cover" alt="权朝阳/quancy.cn" />
-                <img src="./img/BatMan/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn" />
-                <img src="./img/BatMan/joker.png" class="hero" alt="权朝阳/quancy.cn" />
+              <div>
+                <p class="chronicles-child-lineTime">2025-06-12</p>
+                <p class="chronicles-child-body">重写技术栈关系图</p>
               </div>
-              <div class="book-card">
-                <img src="./img/Green/bottom.png" class="cover" alt="权朝阳/quancy.cn" />
-                <img src="./img/Green/logo.png" class="title" style="height: 35px;top: 10" alt="权朝阳/quancy.cn" />
-                <img src="./img/Green/green.png" class="hero" alt="权朝阳/quancy.cn" />
+              <div title="敬请期待...">
+                <p class="chronicles-child-fade-out">2025</p>
+                <p class="chronicles-child-fade-out">项目施工中...</p>
               </div>
             </div>
           </div>
         </div>
-      </section>
-      <!-- 地图 -->
-      <section>
-        <div style="backdrop-filter: blur(100px) !important;padding: 40px;" class="mapMark">
-          <div class='chartsWrapper' id='map'></div>
-          <div class="mapBlank"></div>
+        <!-- 留言板/弹幕墙 -->
+        <div class="walineDiv">
+          <!-- 弹幕墙 -->
+          <div id="danmu" style="height: 300px;"></div>
+          <!-- 留言板 -->
+          <div id="waline"></div>
         </div>
-      </section>
-      <!-- 时间线 -->
-      <div id="chronicles">
-        <h3>迭代时间线</h3>
-        <span class="divLine"></span>
-        <p id="sitTip"></p>
-        <div class="chronicles-container-wrapper">
-          <div id="chronicles-container">
-            <div>
-              <p class="chronicles-child-lineTime">2023-05-21</p>
-              <p class="chronicles-child-body">注册「quancy.cn」域名</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2023-06-09</p>
-              <p class="chronicles-child-body">网站初版v1.0页面上线</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2023-09-19</p>
-              <p class="chronicles-child-body">网站使用2D WebGL渲染背景</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2023-10-08</p>
-              <p class="chronicles-child-body">网站新增音乐模块</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2023-10-19</p>
-              <p class="chronicles-child-body">网站新增留言板模块</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2023-11-07</p>
-              <p class="chronicles-child-body">网站进行ICP备案</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2023-11-28</p>
-              <p class="chronicles-child-body">网站使用全新UI界面2.0</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2024-10-18</p>
-              <p class="chronicles-child-body">网站新增个人旅游足迹</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2025-03-05</p>
-              <p class="chronicles-child-body">网站新增绿洲模块</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2025-05-20</p>
-              <p class="chronicles-child-body">网站新增弹幕功能</p>
-            </div>
-            <div>
-              <p class="chronicles-child-lineTime">2025-06-12</p>
-              <p class="chronicles-child-body">重写技术栈关系图</p>
-            </div>
-            <div title="敬请期待...">
-              <p class="chronicles-child-fade-out">2025</p>
-              <p class="chronicles-child-fade-out">项目施工中...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 留言板/弹幕墙 -->
-      <div class="walineDiv">
-        <!-- 弹幕墙 -->
-        <div id="danmu" style="height: 300px;"></div>
-        <!-- 留言板 -->
-        <div id="waline"></div>
-      </div>
+      </main>
       <!-- 页脚 -->
       <footer style="z-index: 1; padding-top: 60px">
         <div>
@@ -327,8 +335,8 @@
     <script src="./index.js"></script>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/music.js"></script>
-    <script src="./js/newMap.js"></script>
     <script src="./js/link.js"></script>
+    <script src="./js/newMap.js"></script>
     <script type="module">
       import { init } from "./js/waline.min.js";
       init({
@@ -337,6 +345,7 @@
         path: '/',
         reaction: true,
         locale: {
+          anonymous: '吃瓜群众',
           reactionTitle: '对小站有什么想法，说说吧~',
           comment: '留言板',
           placeholder: '无需登录，谨慎留言。\n\nTip: 请勿发表任何关于煽动颠覆国家政权、分裂国家、破坏国家统一，宣扬恐怖主义、极端主义、民族仇恨和暴力的反动言论！！！',
@@ -374,7 +383,7 @@
       document.getElementsByClassName('wl-power')[0].style.display = 'none'
       document.querySelector(".wl-actions a").style.display = 'none'
     </script>
-    <script defer>
+    <script>
       // 弹窗
       setTimeout(() => {
         const openDom = document.getElementById('openDialog');
@@ -402,6 +411,7 @@
       }, 0);
     </script>
     <script src="./js/initDanmu.js"></script>
-    <script defer src="./js/busuanzi.js"></script>
+    <script src="./js/sourceMap.js"></script>
+    <script src="./js/busuanzi.js" async></script>
   </body>
 </html>

@@ -22,10 +22,14 @@ function initManager() {
         const domValueList = danmaku.data.split('-')
         // 如果为true则为新提交的评论
         const flag = domValueList[domValueList.length - 1] !== 'new'
-        const url = domValueList[0]
+        let url = domValueList[0]
+        const nick = domValueList[1]
+        if (['匿名', '吃瓜群众'].includes(nick)) {
+          url = 'https://pic1.imgdb.cn/item/68bac31b58cb8da5c880d8de.jpg'
+        }
         danmaku.node.innerHTML = `
           <div class=${flag ? 'danmu-body' : 'danmu-body-new'}>
-            <img class='avatar-img' src=${url} />
+            <img class='avatar-img' src=${url} alt='吃瓜'>
             <span class='danmu-content-text'>
               <span>${domValueList[1]}</span>：${domValueList[2]}
             </span>
@@ -57,19 +61,16 @@ function initDanmuDom(list) {
     }
 }
 
-function invokeApi(flag, method, url, data) {
-    let httpRequest = new XMLHttpRequest();
-    //第二步：打开连接  将请求参数写在url中
-    httpRequest.open(
-      method,
-      url,
-      data ? true : false
-    );
-    httpRequest.onreadystatechange = async function () {
-      if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
-          var json = httpRequest.responseText; //获取到json字符串，还需解析
-          const msgList = JSON.parse(json).data
+async function invokeApi(flag, url) {
+    await fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('弹幕初始化不正常');
+        }
+        return response.json(); // 解析为JSON
+      })
+      .then(data => {
+          const msgList = data.data
           if (flag === 'init') {
             initManager()
             addEvent()
@@ -81,11 +82,10 @@ function invokeApi(flag, method, url, data) {
             const { avatar, nick, orig } = newMsgLst[0]
             manager.unshift(`${avatar}-${nick}-${orig}-new`)
           }
-        }
-      }
-    };
-    //第三步：发送请求
-    httpRequest.send(data || null);
+      })
+      .catch(error => {
+        console.error('弹幕初始化请求失败:', error);
+      });
 }
 
 /**
@@ -143,7 +143,7 @@ const observer = new MutationObserver((mutations) => {
           console.log('send email...')
           const srcUrl = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-user img').src
           if (!srcUrl.includes('pic.imgdb.cn')) {
-              await invokeApi('new', 'get', `https://msgboard.site/comment?path=%2F&pageSize=1&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
+              await invokeApi('new', `https://msgboard.site/comment?path=%2F&pageSize=1&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
               sendEmailNew()
           }
       }
@@ -203,5 +203,5 @@ function observeFunc(targetNode) {
 
 setTimeout(() => {
   // 查询前30条留言
-  invokeApi('init', 'get', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`, true)
+  invokeApi('init', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
 }, 2000);
