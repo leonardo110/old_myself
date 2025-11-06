@@ -21001,7 +21001,7 @@ define("stats", function () {}),
   window.console || (window.console = { log: function () {} }),
   window.console.log || (window.console.log = function () {}),
   require.config({
-    baseUrl: "./js",
+    baseUrl: "https://quancy.vercel.app/js",
     paths: {
       PIXI: "libs/pixi.min",
       TWEEN: "libs/TweenLite.min",
