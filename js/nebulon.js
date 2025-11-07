@@ -20996,12 +20996,12 @@ var Stats = function () {
   };
 };
 define("stats", function () {}),
-  (window.ASSET_URL = "https://quancy.vercel.app/header/assets/"),
+  (window.ASSET_URL = "./header/assets/"),
   (config = { app: "com/fortieth/FortiethApp" }),
   window.console || (window.console = { log: function () {} }),
   window.console.log || (window.console.log = function () {}),
   require.config({
-    baseUrl: "https://quancy.vercel.app/js",
+    baseUrl: "./js",
     paths: {
       PIXI: "libs/pixi.min",
       TWEEN: "libs/TweenLite.min",
