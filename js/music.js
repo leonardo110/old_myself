@@ -165,7 +165,7 @@ $(function () {
       } else {
         ++currIndex;
       }
-      getMusicInfo();
+      await getMusicInfo();
     } else if (flag == -1) {
       if (currIndex > 0) {
         albums.splice(currIndex, 1)
@@ -266,21 +266,16 @@ $(function () {
       const origin = 'https://sdkapi.hhlqilongzhu.cn/api'
       const musicObj = jaychouList[currIndex]
       //第一步：建立所需的对象
-      const url = `${origin}/dgMusic_kugou/?key=Dragon83995041ADF0275548A7E88A66201838&msg=周杰伦&type=json&quality=hign&n=${musicObj.n}`
+      const url = `${origin}/dgMusic_kugou/?key=Dragon83995041ADF0275548A7E88A66201838&msg=周杰伦&type=json&quality=high&n=${musicObj.n}`
       // 使用fetch原生API调用接口
-      await fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('网络响应不正常');
-        }
-        return response.json(); // 解析为JSON
-      })
-      .then(data => {
-        handlerSong(data)
-      })
-      .catch(error => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('网络响应不正常');
+        const data = await response.json();
+        handlerSong(data);
+      } catch (error) {
         console.error('请求失败:', error);
-      });
+      }
   }
 
   function handlerSong(songInfo) {
@@ -296,8 +291,8 @@ $(function () {
     // 歌名 - 作者
     trackNames.push(title + " - " + singer);
     // 封面
-    // let newCover = cover.replace('http://', 'https://')
-    albumArtworks.push(cover);
+    let newCover = cover.replace('http://', 'https://')
+    albumArtworks.push(newCover);
     // 地址
     trackUrl.push(music_url);
 
