@@ -160,7 +160,7 @@ $(function () {
 
   async function selectTrack(flag) {
     if (flag == 1) {
-      if (currIndex > jaychouList.length - 1) {
+      if (currIndex > numbers.length - 1) {
         currIndex = 0
       } else {
         ++currIndex;
@@ -175,7 +175,7 @@ $(function () {
         --currIndex;
         getMusicInfo('lrc')
       } else if (currIndex < 0) {
-        currIndex = jaychouList.length - 1
+        currIndex = numbers.length - 1
       }
     } else {
       await getMusicInfo();
@@ -264,9 +264,9 @@ $(function () {
    */
   async function getMusicInfo() {
       const origin = 'https://sdkapi.hhlqilongzhu.cn/api'
-      const musicObj = jaychouList[currIndex]
+      const songApiIndex = numbers[currIndex]
       //第一步：建立所需的对象
-      const url = `${origin}/dgMusic_kugou/?key=Dragon83995041ADF0275548A7E88A66201838&msg=周杰伦&type=json&quality=high&n=${musicObj.n}`
+      const url = `${origin}/dgMusic_kugou/?key=Dragon83995041ADF0275548A7E88A66201838&msg=周杰伦&type=json&quality=high&n=${songApiIndex}`
       // 使用fetch原生API调用接口
       try {
         const response = await fetch(url);

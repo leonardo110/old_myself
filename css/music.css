@@ -289,6 +289,64 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .musicBody{
+    height: auto;
+    padding-top: 20px;
+  }
+  #app-cover{
+    width: 92vw;
+    height: 30%;
+  }
+  #player-track{
+    padding: 10px 12px 8px 110px;
+  }
+  #player-track.active{
+    top: -80px;
+  }
+  #album-art{
+    width: 80px;
+    height: 80px;
+    margin-left: 12px;
+    top: -30px;
+    box-shadow: 0 0 0 6px #fff;
+  }
+  .containerLrc{
+    left: 110px;
+    width: calc(100% - 130px);
+    height: 80px;
+    top: 6px;
+  }
+  #player-controls{
+    width: auto;
+    margin: 0 10px 0 110px;
+    float: none;
+    display: flex;
+    justify-content: space-around;
+  }
+  .control{
+    width: auto;
+    padding: 10px 0;
+  }
+  .button{
+    padding: 18px;
+  }
+}
+@media (max-width: 480px) {
+  #player-track{
+    padding: 10px 12px 8px 96px;
+  }
+  #album-art{
+    width: 64px;
+    height: 64px;
+    top: -24px;
+  }
+  .containerLrc{
+    left: 96px;
+    height: 70px;
+  }
+}
+
 .control {
   width: 33.33%;
   float: left;
