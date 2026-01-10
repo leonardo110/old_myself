@@ -263,10 +263,9 @@ $(function () {
    * 调用音乐接口进行查询
    */
   async function getMusicInfo() {
-      const origin = 'https://sdkapi.hhlqilongzhu.cn/api'
-      const songApiIndex = numbers[currIndex]
+      const origin = 'https://cyapi.top/API/qq_music.php?apikey=62ccfd8be755cc5850046044c6348d6cac5ef31bd5874c1352287facc06f94c4&msg=周杰伦&num=50&type=json&n='
       //第一步：建立所需的对象
-      const url = `${origin}/dgMusic_kugou/?key=Dragon83995041ADF0275548A7E88A66201838&msg=周杰伦&type=json&quality=high&n=${songApiIndex}`
+      const url = `${origin}${currIndex + 5}`
       // 使用fetch原生API调用接口
       try {
         const response = await fetch(url);
@@ -279,24 +278,18 @@ $(function () {
   }
 
   function handlerSong(songInfo) {
-    const { title, singer, cover, music_url, quality, lyrics } = songInfo;
+    const { name, cover, url, lyric } = songInfo;
+    const {small} = cover;
     // 歌名
-    let str = title;
-    if (title.indexOf(" (") !== -1) {
-      str = title.split(" (")[0];
-    } else if (title.indexOf("(") !== -1) {
-      str = title.split("(")[0];
-    }
-    albums.push(str);
+    albums.push(name);
     // 歌名 - 作者
-    trackNames.push(title + " - " + singer);
+    trackNames.push(name + " - 周杰伦");
     // 封面
-    let newCover = cover.replace('http://', 'https://')
-    albumArtworks.push(newCover);
+    albumArtworks.push(small);
     // 地址
-    trackUrl.push(music_url);
+    trackUrl.push(url);
 
-    initLrcContent(lyrics)
+    initLrcContent(lyric.text)
   }
 
   function initLrcContent (lrc) {

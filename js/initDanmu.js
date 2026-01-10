@@ -24,9 +24,6 @@ function initManager() {
         const flag = domValueList[domValueList.length - 1] !== 'new'
         let url = domValueList[0]
         const nick = domValueList[1]
-        if (['匿名', '吃瓜群众'].includes(nick)) {
-          url = 'https://pic1.imgdb.cn/item/68bac31b58cb8da5c880d8de.jpg'
-        }
         danmaku.node.innerHTML = `
           <div class=${flag ? 'danmu-body' : 'danmu-body-new'}>
             <img class='avatar-img' src=${url} alt='吃瓜'>
@@ -151,7 +148,7 @@ const observer = new MutationObserver((mutations) => {
           console.log('send email...')
           const srcUrl = document.querySelectorAll('.wl-card-item')[0].querySelector('.wl-user img').src
           if (!srcUrl.includes('pic.imgdb.cn')) {
-              await invokeApi('new', `https://msgboard.site/comment?path=%2F&pageSize=1&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
+              await invokeApi('new', `https://shenglang.site/comment?path=%2F&pageSize=1&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
               sendEmailNew()
           }
       }
@@ -212,5 +209,5 @@ function observeFunc(targetNode) {
 
 setTimeout(() => {
   // 查询前30条留言
-  invokeApi('init', `https://msgboard.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
+  invokeApi('init', `https://shenglang.site/comment?path=%2F&pageSize=30&page=1&lang=zh-CN&sortBy=insertedAt_desc`)
 }, 2000);

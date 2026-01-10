@@ -76,6 +76,10 @@ getDomById("mailId").onclick = () => {
   window.open("mailto:jaychou_master@163.com");
 };
 
+document.querySelector('#openSaturn').onclick = () => {
+  window.open("https://quancy.cn/gemini/saturn", "_blank");
+}
+
 document.querySelector('#copyright p b').innerText = `©${new Date().getFullYear()} 权朝阳`
 
 setTimeout(() => {

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>土星环-手势控制</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Arial', sans-serif; }
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
+        .input_video { display: none; } /* 隐藏视频反馈窗口 */
+        
+        /* UI 覆盖层样式 */
+        #ui-layer {
+            position: absolute; top: 20px; left: 20px; color: rgba(255, 255, 255, 0.8); z-index: 5; 
+            transition: opacity 0.3s ease;
+        }
+        h1 { margin: 0; font-size: 24px; font-weight: 300; letter-spacing: 2px; color: #d4a768; }
+        p { margin: 5px 0; font-size: 10px; color: #666; }
+        
+        /* 控制面板样式 */
+        #control-panel {
+            position: absolute; right: 20px; top: 20px; background: rgba(0, 0, 0, 0.7);
+            padding: 15px; border-radius: 8px; z-index: 10; max-width: 250px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            border: 1px solid #d4a76855;
+        }
+        .panel-hidden {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .control-group { margin-bottom: 10px; font-size: 12px; color: #d4a768; }
+        button {
+            background: #d4a768; border: none; color: black; padding: 5px 10px;
+            margin-top: 5px; cursor: pointer; border-radius: 4px; font-size: 12px;
+            transition: background 0.2s;
+        }
+        
+        #toggle-panel-button {
+            position: absolute; top: 20px; right: 20px; z-index: 11;
+            background: rgba(0, 0, 0, 0.5); color: white; border: 1px solid #d4a768;
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; line-height: 1;
+        }
+        
+        /* 加载提示 */
+        #loading {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; z-index: 20; font-size: 16px; text-align: center;
+            background: rgba(0,0,0,0.8); padding: 20px; border-radius: 8px;
+        }
+        #error-msg { color: #ff4444; font-size: 12px; margin-top: 10px; display: none; }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.6/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>SATURN</h1>
+        <p>Gesture Control Active</p>
+        <p>🖐️ 移动手掌旋转 | 👌 捏合手指控制粒子 | 🤘 举起食指小指进入/退出全屏</p>
+    </div>
+
+    <div id="loading">
+        <div>正在初始化 AI 模型...</div>
+        <div style="font-size: 12px; color: #aaa; margin-top:5px;">(首次加载可能需要 10-20 秒)</div>
+        <div id="error-msg"></div>
+    </div>
+    
+    <div id="toggle-panel-button">☰</div>
+    <div id="control-panel">
+        <div class="control-group">
+            <strong>场景控制</strong>
+            <button id="fullscreen-btn">切换全屏</button>
+        </div>
+        <div class="control-group">
+            <strong>手势提示</strong>
+            <p style="color: #ccc; margin: 2px 0;">🖐️ 手掌移动: 旋转星球</p>
+            <p style="color: #ccc; margin: 2px 0;">👌 食指拇指捏合: 控制粒子</p>
+            <p style="color: #ccc; margin: 2px 0;">🤘 食指小指张开: 切换全屏</p>
+        </div>
+        <div class="control-group">
+            <strong>粒子浓度 (当前: <span id="particle-count-display"></span>)</strong>
+            <input type="range" id="particle-density-slider" min="1" max="2" value="1.5" step="0.1" style="width: 100%;">
+            <button id="reset-density-btn">重置浓度</button>
+        </div>
+    </div>
+
+    <video class="input_video" playsinline></video>
+    
+    <div id="canvas-container"></div>
+
+    <script>
+        // --- 核心调整参数 ---
+        const P_COUNT_BASE = 10000; 
+        const R_COUNT_BASE = 20000; 
+        let currentDensityMultiplier = 1.5; 
+        
+        // **调整点 1: 提高旋转灵敏度的插值系数 (原 0.05)**
+        const ROTATION_LERP_FACTOR = 0.2; // 提高到 0.2，响应速度更快，但保留一点平滑
+        const DISPERSION_LERP_FACTOR = 0.15; // 略微提高，使粒子扩散响应更快
+
+        // --- Three.js 场景初始化 ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.0005);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+        // **调整点 2: 摄像机居中**
+        camera.position.z = 30; 
+        camera.position.y = 0; // 从 5 改为 0，使土星处于垂直中心
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const particleMaterial = new THREE.PointsMaterial({ color: 0xd4a768, size: 0.15, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+        const ringMaterial = new THREE.PointsMaterial({ color: 0xa48866, size: 0.1, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
+        
+        let planetOriginalPositions = [];
+        let ringOriginalPositions = [];
+        let planetParticles, ringParticles;
+
+        // --- 粒子系统创建函数 (保持不变) ---
+        function createPlanet() {
+            if (planetParticles) scene.remove(planetParticles);
+            planetOriginalPositions = [];
+            const geometry = new THREE.BufferGeometry();
+            const count = Math.floor(P_COUNT_BASE * currentDensityMultiplier);
+            const positions = [];
+            for (let i = 0; i < count; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                const r = 8;
+                const x = r * Math.sin(phi) * Math.cos(theta);
+                const y = r * Math.sin(phi) * Math.sin(theta);
+                const z = r * Math.cos(phi);
+                positions.push(x, y, z);
+                planetOriginalPositions.push({x, y, z});
+            }
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            planetParticles = new THREE.Points(geometry, particleMaterial);
+            scene.add(planetParticles);
+        }
+
+        function createRings() {
+            if (ringParticles) scene.remove(ringParticles);
+            ringOriginalPositions = [];
+            const geometry = new THREE.BufferGeometry();
+            const count = Math.floor(R_COUNT_BASE * currentDensityMultiplier);
+            const positions = [];
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 11 + Math.random() * 9; 
+                const x = Math.cos(angle) * radius;
+                const y = (Math.random() - 0.5) * 0.5;
+                const z = Math.sin(angle) * radius;
+                positions.push(x, y, z);
+                ringOriginalPositions.push({x, y, z});
+            }
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            ringParticles = new THREE.Points(geometry, ringMaterial);
+            ringParticles.rotation.x = 0.3; 
+            ringParticles.rotation.z = 0.1;
+            scene.add(ringParticles);
+        }
+        
+        function initializeParticles() {
+            createPlanet();
+            createRings();
+            document.getElementById('particle-count-display').innerText = currentDensityMultiplier.toFixed(1);
+        }
+        
+        initializeParticles();
+
+        // --- 交互控制变量 ---
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+        let dispersionFactor = 0; 
+        let fullscreenGestureCooldown = false; 
+
+        // --- 辅助函数 ---
+        function showError(msg) {
+            const el = document.getElementById('error-msg');
+            el.style.display = 'block';
+            el.innerText = "错误: " + msg;
+            console.error(msg);
+        }
+        
+        function distance(p1, p2) {
+            return Math.sqrt(
+                Math.pow(p1.x - p2.x, 2) + 
+                Math.pow(p1.y - p2.y, 2)
+            );
+        }
+
+        function toggleFullscreen() {
+            const element = document.documentElement;
+            if (document.fullscreenElement) {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            } else {
+                if (element.requestFullscreen) element.requestFullscreen();
+                else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
+            }
+        }
+        document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+        // --- 控制面板切换 ---
+        const panel = document.getElementById('control-panel');
+        const toggleButton = document.getElementById('toggle-panel-button');
+        let isPanelVisible = true;
+
+        toggleButton.addEventListener('click', () => {
+            isPanelVisible = !isPanelVisible;
+            panel.classList.toggle('panel-hidden', !isPanelVisible);
+            toggleButton.innerText = isPanelVisible ? '☰' : '⚙';
+        });
+
+        // --- 粒子密度控制 (UI) ---
+        const slider = document.getElementById('particle-density-slider');
+        const resetBtn = document.getElementById('reset-density-btn');
+
+        slider.addEventListener('input', () => {
+            currentDensityMultiplier = parseFloat(slider.value);
+            initializeParticles();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            currentDensityMultiplier = 1.5;
+            slider.value = 1.5;
+            initializeParticles();
+        });
+
+        // --- MediaPipe 逻辑 ---
+        const videoElement = document.getElementsByClassName('input_video')[0];
+        
+        function onResults(results) {
+            document.getElementById('loading').style.display = 'none';
+
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+
+                // 1. 旋转控制 (手掌中心)
+                const x = landmarks[9].x; 
+                const y = landmarks[9].y;
+                targetRotationY = (x - 0.5) * 4; 
+                targetRotationX = (y - 0.5) * 4; 
+
+                // 2. 粒子扩散控制 (捏合: 拇指[4] vs 食指[8])
+                const thumbTip = landmarks[4];
+                const indexTip = landmarks[8];
+                const dist_pinch = distance(thumbTip, indexTip);
+                
+                let strength = (dist_pinch - 0.05) * 2.5; 
+                strength = Math.max(0, Math.min(1, strength)); 
+                dispersionFactor += (strength - dispersionFactor) * DISPERSION_LERP_FACTOR; // 使用新的插值系数
+
+                // 3. 全屏手势控制
+                const pinkyTip = landmarks[20];
+                const dist_rock = distance(indexTip, pinkyTip);
+                const middle_tip_y = landmarks[12].y;
+                const palm_y = landmarks[0].y;
+                
+                const isRockSign = dist_rock > 0.3 && (middle_tip_y > palm_y - 0.1) && dist_pinch > 0.15; 
+                
+                if (isRockSign && !fullscreenGestureCooldown) {
+                    toggleFullscreen();
+                    fullscreenGestureCooldown = true;
+                    setTimeout(() => fullscreenGestureCooldown = false, 2000); 
+                }
+            } else {
+                dispersionFactor += (0 - dispersionFactor) * DISPERSION_LERP_FACTOR;
+            }
+        }
+
+        const hands = new Hands({locateFile: (file) => {
+            return `./${file}`;
+        }});
+
+        hands.setOptions({
+            maxNumHands: 1,
+            // **调整点 3: 降低模型复杂度，提高帧率，减少卡顿**
+            // 0: Lite (快，但可能精度低), 1: Full (默认, 平衡), 2: Heavy (慢，精度高)
+            // 绝大多数情况下 0 是 Web 端最佳选择，减少卡顿。
+            modelComplexity: 0, 
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+
+        hands.onResults(onResults);
+
+        const cameraUtils = new Camera(videoElement, {
+            onFrame: async () => {
+                try {
+                    await hands.send({image: videoElement});
+                } catch (e) {
+                    // pass
+                }
+            },
+            width: 640,
+            height: 480
+        });
+
+        cameraUtils.start().catch(err => {
+            showError("摄像头启动失败: " + err.message);
+        });
+
+        // --- 动画循环 ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if(planetParticles && ringParticles) {
+                planetParticles.rotation.y += 0.002;
+                
+                // **调整点 4: 使用新的插值系数**
+                scene.rotation.y += (targetRotationY - scene.rotation.y) * ROTATION_LERP_FACTOR;
+                scene.rotation.x += (targetRotationX - scene.rotation.x) * ROTATION_LERP_FACTOR;
+
+                // --- 粒子爆炸效果逻辑 (保持不变) ---
+                const pPositions = planetParticles.geometry.attributes.position.array;
+                for(let i = 0; i < planetOriginalPositions.length; i++) {
+                    const orig = planetOriginalPositions[i];
+                    const noise = Math.random() * 0.5; 
+                    const scalar = 1 + (dispersionFactor * (1.5 + noise)); 
+                    
+                    pPositions[i*3] = orig.x * scalar;
+                    pPositions[i*3+1] = orig.y * scalar;
+                    pPositions[i*3+2] = orig.z * scalar;
+                }
+                planetParticles.geometry.attributes.position.needsUpdate = true;
+
+                const rPositions = ringParticles.geometry.attributes.position.array;
+                for(let i = 0; i < ringOriginalPositions.length; i++) {
+                    const orig = ringOriginalPositions[i];
+                    const scalar = 1 + (dispersionFactor * 0.5); 
+                    rPositions[i*3] = orig.x * scalar;
+                    rPositions[i*3+1] = orig.y * scalar + (Math.random()-0.5) * dispersionFactor * 5; 
+                    rPositions[i*3+2] = orig.z * scalar;
+                }
+                ringParticles.geometry.attributes.position.needsUpdate = true;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

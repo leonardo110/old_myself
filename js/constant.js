@@ -692,4 +692,4 @@ const cardDescList = [
 ]
 
 // 生成从 2 到 200 的数字数组
-const numbers = Array.from({ length: 199 }, (_, i) => i + 2);
+const numbers = Array.from({ length: 50 }, (_, i) => i);
