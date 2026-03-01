@@ -85,6 +85,10 @@ document.querySelector('#copyright p b').innerText = `©${new Date().getFullYear
 setTimeout(() => {
   const logDom = document.querySelector('#chronicles-container')
   logDom.scrollLeft = logDom.scrollWidth
+  // 流程年份
+  const thisYear = new Date().getFullYear();
+  const yearDom = document.getElementById('this-year');
+  yearDom.innerText = thisYear;
 }, 0);
 
 // 全局脚本（添加“回到顶部”按钮交互）
