@@ -13,7 +13,6 @@ const chinaGeoCoordMap = {
 //   湖北: [114.3896, 30.6628],
 //   贵州: [106.6992, 26.7682],
 //   广东: [113.12244, 23.009505],
-//   广西: [108.479, 23.1152],
 //   海南: [110.3893, 19.8516],
 //   甘肃: [103.5901, 36.3043],
     西安: [108.9467,34.2612],
@@ -34,6 +33,9 @@ const chinaGeoCoordMap = {
     大理: [100.1299, 25.4663],
     上海: [121.3404,31.1957],
     淮安: [118.7503,33.8219],
+    北海: [109.1010, 21.4296],
+    涠洲岛: [109.1104, 21.0324],
+    安康:[108.1724, 32.9270]
 };
 
 const chinaDatas = [
@@ -151,6 +153,24 @@ const chinaDatas = [
             value: 3,
         },
     ],
+    [
+        {
+            name: "北海",
+            value: 3,
+        },
+    ],
+    [
+        {
+            name: "涠洲岛",
+            value: 3,
+        }
+    ],
+    [
+        {
+            name: "安康",
+            value: 3,
+        }
+    ]
 ];
 
 const convertData = function (data) {
@@ -215,7 +235,7 @@ const chart = echarts.init(document.getElementById("map"));
                         //圆环显示文字
                         return params.data.name;
                     },
-                    fontSize: 10,
+                    fontSize: 13,
                 },
                 emphasis: {
                     show: true,
