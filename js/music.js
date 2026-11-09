@@ -62,10 +62,21 @@ $(function () {
     }, 300);
   }
 
+  // 根据鼠标 / 触摸位置计算进度条上的相对坐标（移动端点击进度条也能正确定位）
+  function getSeekPosition(event) {
+    if (!event) return null;
+    var point = event.touches && event.touches.length ? event.touches[0] : event;
+    var rect = areaDom.getBoundingClientRect();
+    if (!rect.width) return null;
+    var offsetX = Math.min(Math.max(point.clientX - rect.left, 0), rect.width);
+    return { x: offsetX, ratio: offsetX / rect.width };
+  }
+
   function showHover(event) {
-    seekBarPos = sArea.offset();
-    seekT = event.clientX - seekBarPos.left;
-    seekLoc = audio.duration * (seekT / sArea.outerWidth());
+    var pos = getSeekPosition(event);
+    if (!pos) return;
+    seekT = pos.x;
+    seekLoc = audio.duration * pos.ratio;
 
     sHover.width(seekT);
 
@@ -73,8 +84,6 @@ $(function () {
 
     ctMinutes = Math.floor(cM);
     ctSeconds = Math.floor(seekLoc - ctMinutes * 60);
-
-    if (ctMinutes < 0 || ctSeconds < 0) return;
 
     if (ctMinutes < 0 || ctSeconds < 0) return;
 
@@ -92,7 +101,13 @@ $(function () {
     insTime.text("00:00").css({ left: "0px", "margin-left": "0px" }).fadeOut(0);
   }
 
-  function playFromClickedPos() {
+  function playFromClickedPos(event) {
+    var pos = getSeekPosition(event);
+    if (pos) {
+      seekT = pos.x;
+      seekLoc = audio.duration * pos.ratio;
+    }
+    if (!isFinite(seekLoc) || seekLoc < 0) return;
     audio.currentTime = seekLoc;
     seekBar.width(seekT);
     hideHover();
@@ -294,29 +309,30 @@ $(function () {
 
   function initLrcContent (lrc) {
     // 最开始获取到的歌词列表是字符串类型（不好操作）
-    let lrcArr = lrc.split('\n');
+    let lrcArr = String(lrc || '').split('\n');
     // 接收修正后的歌词数组
     let result = [];
     // 获取所要用到的dom列表
     let doms = {
-        ul: document.querySelector("ul"),
+        ul: document.querySelector(".wordList") || document.querySelector("ul"),
         container: document.querySelector(".containerLrc")
     }
+    if (!doms.ul || !doms.container) return;
     // 将歌词数组转成由对象组成的数组，对象有time和word两个属性（为了方便操作）
     for (let i = 0; i < lrcArr.length; i++) {
         var lrcData = lrcArr[i].split(']');
-        var lrcTime = lrcData[0].substring(1);
+        // 跳过没有时间标签或内容为空的行
+        if (lrcData.length < 2 || !lrcData[1] || !lrcData[1].trim()) continue;
         var obj = {
-            time: parseTime(lrcTime),
-            word: lrcData[1]
+            time: parseTime(lrcData[0].substring(1)),
+            word: lrcData[1].trim()
         }
-        result.push(obj);
+        if (!isNaN(obj.time)) result.push(obj);
     }
-    // console.log('result', result)
     // 将tiem转换为秒的形式
     function parseTime(lrcTime) {
-        lrcTimeArr = lrcTime.split(":")
-        return + lrcTimeArr[0] * 60 + +lrcTimeArr[1];
+        let lrcTimeArr = String(lrcTime).split(":")
+        return +lrcTimeArr[0] * 60 + +lrcTimeArr[1];
     }
     // 获取当前播放到的歌词的下标
     function getIndex() {
@@ -326,6 +342,8 @@ $(function () {
                 return i - 1;
             }
         }
+        // 最后一句歌词之后要停留在最后一行，否则下标为 undefined 会导致滚动偏移 NaN
+        return result.length - 1;
     }
     // 创建歌词列表
     function createElements() {
@@ -339,25 +357,33 @@ $(function () {
     }
 
     function loopDeleteDom () {
-      const ulDom = document.querySelector('.wordList');
+      const ulDom = doms.ul;
       while (ulDom.firstChild) {
         ulDom.firstChild.remove();
       }
     }
     // 先清除之前的所有的li元素
     loopDeleteDom();
+    // 无歌词时直接返回
+    if (!result.length) {
+      doms.ul.style.transform = "translateY(0)";
+      return;
+    }
     // 再创建歌词文档元素，展示歌词
     createElements();
+    doms.ul.style.transform = "translateY(0)";
     // 获取显示窗口的可视高度
     let containerHeight = doms.container.clientHeight;
     // 获取歌词列表的可视高度
-    let liHeight = doms.ul.children[0].clientHeight;
+    let liHeight = doms.ul.children.length ? doms.ul.children[0].clientHeight : 0;
     // 设置最大最小偏移量，防止显示效果不佳
     let minOffset = 0;
     let maxOffset = doms.ul.clientHeight - containerHeight;
     // 控制歌词滚动移动的函数
     function setOffset() {
+        if (!liHeight) return;
         let index = getIndex();
+        if (index < 0) index = 0;
         // 计算滚动距离
         let offset = liHeight * index - containerHeight / 2 + liHeight / 2;
         if (offset < minOffset) {
@@ -379,8 +405,10 @@ $(function () {
             li.classList.add("active");
         }
     };
+    // 先移除上一首歌绑定的监听，避免切歌后残留多个监听导致卡顿
+    $(audio).off("timeupdate.lrc");
     // 当audio的播放时间更新时，触发该事件
-    $(audio).on("timeupdate", setOffset);
+    $(audio).on("timeupdate.lrc", setOffset);
   }
 
   // 左右键监听

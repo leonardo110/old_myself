@@ -1,0 +1,708 @@
+/* ==========================================================================
+   移动端适配（仅在窄屏生效）
+   说明：本文件最后加载，所有适配规则都包裹在 @media (max-width: 768px) 中，
+         PC 端（>= 769px）不会命中任何一条规则，因此不会影响现有 PC 端效果。
+   ========================================================================== */
+
+/* 汉堡菜单按钮：PC 端不显示 */
+.nav-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* 移动端统一使用 border-box，避免 quirks 模式下 width + padding 撑破视口 */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* 移动端改为文档滚动，避免 body 固定 100vh 导致底部内容被浏览器工具栏遮挡 */
+  html,
+  body {
+    scroll-snap-type: none;
+  }
+
+  body {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  /* 背景：使用 vw/vh 而不是 100%，避免 quirks 模式下固定定位元素
+     按偏宽的初始包含块计算，导致右侧 UI 被挤出屏幕 */
+  #myselfGroundImg {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #myselfGroundImg #container,
+  #myselfGroundImg canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* ============ 顶部导航 ============ */
+  #navTopMenu {
+    left: 0;
+    width: 100vw;
+    height: 64px;
+    z-index: 1000;
+  }
+
+  #navTopMenu.sticky {
+    height: 64px;
+  }
+
+  /* 顶部一层很淡的渐变，保证 Logo / 按钮在星空背景上清晰可见 */
+  #navTopMenu::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 96px;
+    background-image: linear-gradient(180deg, rgba(2, 6, 14, 0.6), rgba(2, 6, 14, 0));
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  #navMenuDiv {
+    top: 12px;
+    left: 14px;
+  }
+
+  #logoContent {
+    width: 170px;
+    padding-left: 6px;
+    font-size: 21px;
+    line-height: 40px;
+  }
+
+  .avator-class {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* 汉堡按钮 */
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    position: fixed;
+    top: 10px;
+    left: calc(100vw - 56px);
+    right: auto;
+    width: 46px;
+    height: 44px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    z-index: 1003;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: #fff;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+
+  #navTopMenu.nav-open .nav-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  #navTopMenu.nav-open .nav-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  #navTopMenu.nav-open .nav-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* 侧滑抽屉式导航（相对固定的导航栏定位，避免受初始包含块宽度影响） */
+  #navTopMenu #hrefDiv {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: auto;
+    width: min(78vw, 320px);
+    height: 100vh;
+    height: 100dvh;
+    padding: calc(64px + env(safe-area-inset-top)) 0
+      calc(24px + env(safe-area-inset-bottom)) 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    background-color: rgba(8, 12, 20, 0.94);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: -18px 0 40px rgba(0, 0, 0, 0.45);
+    transform: translateX(102%);
+    transition: transform 0.32s ease;
+    overflow-y: auto;
+    z-index: 1001;
+  }
+
+  #navTopMenu.nav-open #hrefDiv {
+    transform: translateX(0);
+  }
+
+  #navTopMenu .hrefText {
+    display: block;
+    margin: 0;
+    padding: 15px 26px;
+    border-radius: 0;
+    font-size: 17px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    touch-action: manipulation;
+  }
+
+  #navTopMenu .hrefText:last-child {
+    border-bottom: 0;
+  }
+
+  /* ============ 区块高度：移动端按内容自适应 ============ */
+  main > section {
+    height: auto;
+    min-height: 0;
+  }
+
+  main > section:first-child {
+    position: relative;
+    height: 100vh !important;
+    height: 100svh !important;
+    min-height: 480px;
+  }
+
+  #skill,
+  .like-card {
+    height: auto;
+  }
+
+  /* ============ 首屏 ============ */
+  #topTitle {
+    top: 42%;
+  }
+
+  #matrix {
+    height: auto;
+    top: -42px;
+    font-size: clamp(40px, 15vw, 76px);
+    line-height: 1.15;
+  }
+
+  #matrix sup {
+    font-size: 0.52em;
+  }
+
+  .myselfCss {
+    top: -26px;
+  }
+
+  .lineOrange {
+    width: 46px;
+  }
+
+  #scrollDown {
+    bottom: 36px;
+    font-size: 18px;
+  }
+
+  #scrollDownIcon {
+    top: 14px;
+    left: calc(50% - 7px);
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+  }
+
+  /* ============ 玻璃面板 ============ */
+  .glass-panel {
+    padding: 16px 12px !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+  }
+
+  /* 移动端减弱模糊半径，显著降低 GPU 压力（视觉上变化很小） */
+  #skill,
+  #chronicles,
+  .walineDiv,
+  .musicBody {
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+
+  #player-content {
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+
+  .chartsWrapper {
+    width: 100% !important;
+    height: 58vh;
+    height: min(60vh, 480px);
+    min-height: 340px;
+    margin: 0;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  #map {
+    height: 56vh;
+    height: min(58vh, 460px);
+    min-height: 320px;
+  }
+
+  .mapBlank {
+    height: 16px;
+  }
+
+  /* ============ 印象 / 音乐 ============ */
+  .musicBody {
+    height: auto;
+    padding: 8px 0 0 0;
+  }
+
+  .musicDiv {
+    height: 300px;
+    margin-top: 6px;
+  }
+
+  #app-cover {
+    width: 92vw;
+    height: 150px;
+    margin: 0 auto;
+    top: 50%;
+  }
+
+  #player-track {
+    padding: 11px 14px 9px 102px;
+  }
+
+  #player-track.active {
+    top: -84px;
+  }
+
+  #album-name {
+    font-size: 15px;
+  }
+
+  #track-name {
+    font-size: 12px;
+    margin: 1px 0 6px 0;
+  }
+
+  .qualityCss {
+    right: 14px;
+    top: 12px;
+  }
+
+  .vipIcon {
+    width: 20px;
+  }
+
+  #album-art {
+    width: 74px;
+    height: 74px;
+    margin-left: 12px;
+    top: -30px;
+    box-shadow: 0 0 0 6px #fff;
+  }
+
+  #album-art.active {
+    top: -38px;
+    box-shadow: 0 0 0 3px #fff7f7, 0 18px 28px -12px #afb7c1;
+  }
+
+  .containerLrc {
+    left: 104px;
+    width: calc(100% - 118px);
+    height: 62px;
+    top: 8px;
+  }
+
+  .containerLrc li {
+    height: 21px;
+    line-height: 21px;
+    font-size: 11px;
+  }
+
+  #player-controls {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 2px;
+    width: auto;
+    height: 58px;
+    margin: 0;
+    float: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    overflow: visible;
+  }
+
+  .control {
+    width: auto;
+    flex: 1;
+    padding: 0;
+    text-align: center;
+  }
+
+  .button {
+    box-sizing: border-box;
+    width: 34px;
+    height: 34px;
+    padding: 7px;
+    margin: 0 auto;
+    border-radius: 50%;
+  }
+
+  .button i {
+    font-size: 19px;
+  }
+
+  /* 进度条触控热区加大（视觉高度不变） */
+  #s-area::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -9px;
+    bottom: -9px;
+  }
+
+  #tagContent {
+    height: auto;
+    padding: 0 14px 48px 14px;
+  }
+
+  #myselfDiv,
+  #chronicles h3 {
+    font-size: 24px;
+  }
+
+  .lineBottom {
+    margin-top: 13px;
+  }
+
+  .curTag {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 0 4px;
+  }
+
+  .curTag span {
+    margin: 0;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  /* ============ 绿洲（电影卡片） ============ */
+  .favorite-body {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 24px 16px 44px 16px;
+  }
+
+  .ev-module-edit {
+    justify-content: start;
+    padding-left: 4px;
+  }
+
+  .ev-module-edit-box1,
+  .ev-module-edit-box3 {
+    font-size: 26px;
+  }
+
+  .ev-module-edit-box2 {
+    width: 46px;
+    margin-top: 12px;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    gap: 14px 12px;
+    margin-top: 24px;
+  }
+
+  .book-card {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* 用 padding 撑出 195:270 的海报比例，兼容不支持 aspect-ratio 的旧版 Safari */
+  .book-card::before {
+    content: "";
+    display: block;
+    padding-top: 138.46%;
+  }
+
+  /* ::before 会占据卡片首行，这里把绝对定位的图片重新钉在顶部 */
+  .book-card img {
+    top: 0;
+    left: 0;
+  }
+
+  .book-card .cover {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+  }
+
+  .book-card .title {
+    width: 100%;
+  }
+
+  /* ============ 时间线：移动端改为纵向 ============ */
+  #chronicles {
+    padding: 44px 0 56px 0;
+  }
+
+  #sitTip {
+    margin-top: 12px;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+
+  .chronicles-container-wrapper {
+    left: 0;
+    width: 100%;
+    margin-top: 22px;
+    padding: 0 24px;
+    overflow: visible;
+  }
+
+  /* 按内容宽度收紧后整体水平居中（时间轴线 + 文字作为一块居中） */
+  #chronicles-container {
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    white-space: normal;
+    overflow: visible;
+    padding: 2px 0 2px 18px;
+    border-left: 2px solid rgba(76, 216, 79, 0.35);
+  }
+
+  #chronicles-container div {
+    display: block;
+    margin: 0 0 20px 0;
+    position: relative;
+    text-align: left;
+  }
+
+  #chronicles-container div:last-child {
+    margin-bottom: 0;
+  }
+
+  #chronicles-container div::before {
+    content: "";
+    position: absolute;
+    left: -23px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #4cd84f;
+    box-shadow: 0 0 0 3px rgba(76, 216, 79, 0.16);
+  }
+
+  .chronicles-child-lineTime,
+  .chronicles-child-fade-out {
+    font-size: 15px;
+  }
+
+  .chronicles-child-body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ============ 留言 / 弹幕 ============ */
+  .walineDiv {
+    padding: 12px 0 28px 0;
+  }
+
+  #waline {
+    width: 92%;
+  }
+
+  #danmu {
+    height: 200px !important;
+  }
+
+  .danmu-body {
+    font-size: 13px;
+    max-width: 250px;
+    padding: 6px 10px;
+  }
+
+  .danmu-body-new {
+    font-size: 15px;
+    max-width: 270px;
+    padding: 6px 12px;
+  }
+
+  .danmu-body img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .danmu-body-new img {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* ============ 页脚 ============ */
+  footer {
+    padding: 40px 16px 20px 16px !important;
+  }
+
+  footer div {
+    display: block;
+    width: 100%;
+    padding: 6px 0;
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  footer a {
+    font-size: 13px;
+  }
+
+  #copyright {
+    margin-top: 12px;
+  }
+
+  #busuanzi_container_site_pv {
+    padding: 0 12px 14px 12px;
+    font-size: 11px;
+    line-height: 1.9;
+  }
+
+  .contributionAutor {
+    bottom: 6px;
+  }
+
+  /* 用 top + vh 定位：quirks 模式下 innerHeight 与实际可视高度不一致，
+     用 bottom 定位会被推到屏幕外；dvh 可跟随移动端地址栏伸缩 */
+  #topBtn {
+    top: calc(100vh - 54px - env(safe-area-inset-bottom));
+    top: calc(100dvh - 54px - env(safe-area-inset-bottom));
+    bottom: auto;
+    left: calc(100vw - 50px);
+    right: auto;
+    width: 38px;
+    z-index: 990;
+  }
+
+  /* ============ 加载动画 ============ */
+  .loader span {
+    width: 18px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 4px;
+    font-size: 26px;
+  }
+
+  .loader span::after {
+    width: 18px;
+    height: 3px;
+    bottom: -12px;
+  }
+
+  .loader span:nth-child(8)::before,
+  .loader span:nth-child(9)::before,
+  .loader span:nth-child(10)::before {
+    width: 18px;
+    height: 18px;
+    bottom: 9px;
+  }
+}
+
+/* 触屏设备点击卡片后的立体效果：
+   .is-active 只由 js/mobile.js 在无 hover 能力的设备上添加，
+   PC 端永远不会出现该 class，因此这里不影响桌面端 */
+.book-card.is-active .cover {
+  transform: perspective(500px) rotateX(25deg);
+}
+
+.book-card.is-active .hero {
+  opacity: 1;
+  transform: perspective(500px) translate3d(0, -30px, 44px);
+}
+
+.book-card.is-active .title {
+  transform: perspective(500px) translate3d(0, 120px, 44px) scale(1.06);
+}
+
+@media (hover: none) {
+  .curTag span:hover {
+    transform: none;
+  }
+}
+
+/* 平板尺寸下电影卡片改为三列，避免单张卡片过大 */
+@media (min-width: 560px) and (max-width: 768px) {
+  .card-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* 小屏手机进一步压缩留白 */
+@media (max-width: 380px) {
+  #matrix {
+    font-size: 48px;
+  }
+
+  #matrix sup {
+    font-size: 26px;
+  }
+
+  .curTag span {
+    padding: 7px 13px;
+    font-size: 13px;
+  }
+
+  #tagContent {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .favorite-body {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  footer p {
+    font-size: 15px;
+  }
+}

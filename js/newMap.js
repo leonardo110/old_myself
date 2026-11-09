@@ -38,6 +38,9 @@ const chinaGeoCoordMap = {
     安康:[108.1724, 32.9270]
 };
 
+// 窄屏（移动端）适配：仅调整图表参数，PC 端数值保持不变
+const isNarrow = document.documentElement.clientWidth <= 768;
+
 const chinaDatas = [
     [
         {
@@ -224,7 +227,7 @@ const chart = echarts.init(document.getElementById("map"));
                 //涟漪特效
                 period: 4, //动画时间，值越小速度越快
                 brushType: "stroke", //波纹绘制方式 stroke, fill
-                scale: 10, //波纹圆环最大限制，值越大波纹越大
+                scale: isNarrow ? 6 : 10, //波纹圆环最大限制，值越大波纹越大
             },
             label: {
                 normal: {
@@ -235,7 +238,7 @@ const chart = echarts.init(document.getElementById("map"));
                         //圆环显示文字
                         return params.data.name;
                     },
-                    fontSize: 13,
+                    fontSize: isNarrow ? 10 : 13,
                 },
                 emphasis: {
                     show: true,
@@ -243,8 +246,10 @@ const chart = echarts.init(document.getElementById("map"));
             },
             symbol: "circle",
             symbolSize: function (val) {
-                return 3 + val[2] * 1; //圆环大小
+                return (isNarrow ? 2 : 3) + val[2] * (isNarrow ? 0.7 : 1); //圆环大小
             },
+            // 窄屏下城市名容易重叠，隐藏被遮挡的标签，PC 端保持原有显示
+            ...(isNarrow ? { labelLayout: { hideOverlap: true } } : {}),
             itemStyle: {
                 normal: {
                 show: false,
@@ -287,7 +292,7 @@ const chart = echarts.init(document.getElementById("map"));
                 },
             },
             symbol: "pin",
-            symbolSize: 50,
+            symbolSize: isNarrow ? 34 : 50,
             data: [
                 {
                     name: item[0],
@@ -353,9 +358,15 @@ const option = {
         max: 30,
         calculable: true,
         show: true,
+        orient: isNarrow ? "horizontal" : "vertical",
+        left: isNarrow ? "center" : "left",
+        bottom: isNarrow ? 4 : "auto",
+        itemWidth: isNarrow ? 10 : 20,
+        itemHeight: isNarrow ? 90 : 140,
         color: ['#f44336', '#fc9700', '#ffde00', '#ffde00', '#00eaff'],
         textStyle: {
             color: "#fff",
+            fontSize: isNarrow ? 10 : 12,
         },
     },
     geo: {
@@ -383,6 +394,16 @@ const option = {
 };
 
 chart.setOption(option);
+
+// 窗口尺寸 / 横竖屏变化时重绘，避免地图被拉伸
+var resizeMapChart = function () {
+    chart.resize();
+};
+if (window.QuanCY && window.QuanCY.onViewportChange) {
+    window.QuanCY.onViewportChange(resizeMapChart);
+} else {
+    window.addEventListener("resize", resizeMapChart);
+}
 // [
 //     {
 //       name: "新疆",

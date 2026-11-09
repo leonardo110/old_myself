@@ -2,33 +2,94 @@ function getDomById(name) {
   return document.getElementById(name)
 }
 
+/* -------------------------------------------------------------------------- */
+/* 滚动相关工具                                                                */
+/* 历史原因：PC 端 body 是滚动容器（body 被绝对定位且限制为 100vh），         */
+/* 移动端为了让浏览器工具栏正常伸缩，改成了文档滚动。这里统一封装，           */
+/* 两种模式都能正确滚动 / 读取滚动位置。                                       */
+/* -------------------------------------------------------------------------- */
+function bodyIsScroller() {
+  var body = document.body
+  return (
+    !!body &&
+    body.scrollHeight > body.clientHeight + 2 &&
+    getComputedStyle(body).overflowY !== "visible"
+  )
+}
+
+function getPageScrollTop() {
+  return Math.max(
+    window.pageYOffset || 0,
+    document.documentElement.scrollTop || 0,
+    document.body.scrollTop || 0
+  )
+}
+
+function getPageScrollHeight() {
+  return Math.max(
+    document.documentElement.scrollHeight || 0,
+    document.body.scrollHeight || 0
+  )
+}
+
+function scrollPageTo(y) {
+  var top = Math.max(0, Math.round(y))
+  try {
+    window.scrollTo({ top: top, behavior: "smooth" })
+  } catch (error) {
+    window.scrollTo(0, top)
+  }
+  // 当 body 才是滚动容器时，上面的调用不一定生效，这里补一次
+  if (bodyIsScroller()) {
+    try {
+      document.body.scrollTo({ top: top, behavior: "smooth" })
+    } catch (error) {
+      document.body.scrollTop = top
+    }
+  }
+}
+
+// 顶部固定导航遮挡的高度
+function getNavOffset(extra) {
+  var isMobile = document.documentElement.clientWidth <= 768
+  return isMobile ? 64 : (extra || 0) + 100
+}
+
+function scrollToDom(dom, extra) {
+  if (!dom) return
+  scrollPageTo(dom.offsetTop - getNavOffset(extra))
+}
+
+// 同时监听 window 与 body 的 scroll（body 为滚动容器时 scroll 事件不会冒泡到 window）
+function onPageScroll(handler) {
+  window.addEventListener("scroll", handler, { passive: true })
+  if (document.body) {
+    document.body.addEventListener("scroll", handler, { passive: true })
+  }
+}
+
 getDomById("scrollDownIcon").onclick = () => {
-  document.body.scrollTop = getDomById("skill").offsetTop - 100;
+  scrollToDom(getDomById("skill"));
 };
 
 getDomById("aboutText").onclick = () => {
-  document.body.scrollTop =
-    document.getElementsByClassName("like-card")[0].offsetTop - 100;
+  scrollToDom(document.getElementsByClassName("like-card")[0]);
 };
 
 getDomById("footmarkText").onclick = () => {
-  document.body.scrollTop =
-    document.getElementsByClassName("mapMark")[0].offsetTop - 100;
+  scrollToDom(document.getElementsByClassName("mapMark")[0]);
 };
 
 getDomById("favorite").onclick = () => {
-  document.body.scrollTop =
-    document.getElementsByClassName("like-card")[1].offsetTop - 100;
+  scrollToDom(document.getElementsByClassName("like-card")[1]);
 };
 
 getDomById("msgText").onclick = () => {
-  document.body.scrollTop =
-    document.getElementsByClassName("walineDiv")[0].offsetTop - 100;
+  scrollToDom(document.getElementsByClassName("walineDiv")[0]);
 };
 
 getDomById("logText").onclick = () => {
-  document.body.scrollTop =
-    getDomById("chronicles").offsetTop - 200;
+  scrollToDom(getDomById("chronicles"), 100);
 };
 
 getDomById("footer-contribution").onmouseenter = () => {
@@ -84,20 +145,28 @@ document.querySelector('#copyright p b').innerText = `©${new Date().getFullYear
 
 setTimeout(() => {
   const logDom = document.querySelector('#chronicles-container')
-  logDom.scrollLeft = logDom.scrollWidth
+  if (logDom) {
+    logDom.scrollLeft = logDom.scrollWidth
+  }
   // 流程年份
   const thisYear = new Date().getFullYear();
   const yearDom = document.getElementById('this-year');
-  yearDom.innerText = thisYear;
+  if (yearDom) {
+    yearDom.innerText = thisYear;
+  }
 }, 0);
 
-// 全局脚本（添加“回到顶部”按钮交互）
-window.addEventListener("scroll", function scrollLoadMore() {
-  let scrollTop = document.body.scrollTop; //滚动上去隐藏部分的高度
-  if (scrollTop > 0) {
-    getDomById("navTopMenu").style.backdropFilter = "blur(100px)";
+// 全局脚本（顶部导航滚动后加毛玻璃）
+onPageScroll(function scrollLoadMore() {
+  const navDom = getDomById("navTopMenu");
+  if (!navDom) return;
+  const isMobile = document.documentElement.clientWidth <= 768;
+  if (getPageScrollTop() > 0) {
+    navDom.style.backdropFilter = "blur(" + (isMobile ? 18 : 100) + "px)";
+    navDom.style.webkitBackdropFilter = "blur(" + (isMobile ? 18 : 100) + "px)";
   } else {
-    getDomById("navTopMenu").style.backdropFilter = "";
+    navDom.style.backdropFilter = "";
+    navDom.style.webkitBackdropFilter = "";
   }
 });
 
@@ -114,7 +183,9 @@ function getRandom(min, max) {
 }
 
 function date() {
+  if (document.hidden) return; // 后台标签页不再空转
   var shower = getDomById("sitTip"); //不断获取新的被输出的数据
+  if (!shower) return;
   var subtime = (Date.now() - new Date("2023-06-09 12:00:00")) / 1000; //计算时间差,并将毫秒转化为秒
   var days = parseInt(subtime / 86400); //天  24*60*60*1000
   var hours = fillZero(parseInt(subtime / 3600) - 24 * days); //小时  60*60  总小时数-过去小时数=现在小时数
@@ -149,17 +220,16 @@ setInterval(function () {
 
   // 阻尼与显示阈值（可按需调整）
   const damping = 0.5;      // 位移减速比例（0.3~0.6 推荐）
-  const showOffset = 120;   // 距离底部多少像素内开始显示
 
   let isAutoScroll = false;
   let startTop = 0;
 
-  const getScrollTop = () =>
-    document.documentElement.scrollTop || document.body.scrollTop;
-  const getScrollHeight = () =>
-    document.documentElement.scrollHeight || document.body.scrollHeight;
+  const getScrollTop = () => getPageScrollTop();
+  const getScrollHeight = () => getPageScrollHeight();
+  // 注意：quirks 模式下移动端的 documentElement.clientHeight 会返回内容总高度，
+  // 这里优先取 window.innerHeight（真实可视高度）
   const getClientHeight = () =>
-    document.documentElement.clientHeight || window.innerHeight;
+    window.innerHeight || document.documentElement.clientHeight;
 
   // 点击平滑回顶，同时图标跟随上升（减速）
   topBtn.addEventListener("click", () => {
@@ -167,13 +237,13 @@ setInterval(function () {
     isAutoScroll = true;
     topBtn.style.opacity = "0.5";
     topBtn.style.pointerEvents = "none";
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollPageTo(0);
   });
 
   const updateTopBtn = () => {
     const currentTop = getScrollTop();
     const nearBottom =
-      Math.ceil(currentTop + getClientHeight()) >= document.body.scrollHeight * 0.98;
+      Math.ceil(currentTop + getClientHeight()) >= getScrollHeight() * 0.98;
     const atTop = currentTop <= 0;
 
     if (isAutoScroll) {
@@ -203,7 +273,7 @@ setInterval(function () {
   };
 
   updateTopBtn();
-  window.addEventListener("scroll", updateTopBtn);
+  onPageScroll(updateTopBtn);
 })();
 
 

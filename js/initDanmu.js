@@ -174,8 +174,11 @@ function addEvent() {
       manager.unfreeze();
     }
   });
+  // 说明：手机端的 devicePixelRatio 天然就是 2~3，不能据此判断页面被缩放，
+  // 否则每次在移动端打开都会弹出“请将浏览器缩放至100%”的提示。
+  const isMobileLayout = document.documentElement.clientWidth <= 768;
   const zoomNum = window.devicePixelRatio;
-  if (zoomNum !== 1) {
+  if (!isMobileLayout && zoomNum !== 1) {
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",

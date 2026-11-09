@@ -152,7 +152,6 @@ label {
 }
 .walineDiv {
   position: relative;
-  /* top: 50%; */
   width: 100%;
   padding: 20px 0px 40px 0px;
   transition: 0.25s;
@@ -950,4 +949,12 @@ footer a:hover {
 }
 #topBtn:hover {
   opacity: 1 !important;
+}
+
+/* 通用玻璃面板（由 index.html 中的内联样式抽取，PC 端表现保持一致；
+   移动端可在 mobile.css 中统一调整内边距与模糊强度） */
+.glass-panel {
+  padding: 40px;
+  -webkit-backdrop-filter: blur(100px) !important;
+  backdrop-filter: blur(100px) !important;
 }
