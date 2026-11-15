@@ -217,80 +217,7 @@ footer {
   height: 3px;
   background-color: #4cd84f;
 }
-#chronicles h3 {
-  margin-bottom: 20px;
-  font-size: 30px;
-  color: white;
-  transition: 0.25s;
-}
-#sitTip {
-  margin-top: 20px;
-  font-size: 15px;
-  color: white;
-}
-.chronicles-container-wrapper {
-  position: relative;
-  left: 15%;
-  margin-top: 30px;
-  width: 70%;
-  overflow: hidden;
-}
-#chronicles-container {
-  padding-bottom: 10px;
-  white-space: nowrap;
-  overflow-y: hidden;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-#chronicles-container div {
-  display: inline-block;
-  margin: 0 80px;
-  text-align: left;
-  vertical-align: top;
-}
-.chronicles-child-lineTime {
-  margin-bottom: 3px;
-  color: #4cd84f;
-}
-.chronicles-child-lineTime,
-.chronicles-child-fade-out {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-}
-.chronicles-child-fade-out {
-  color: #c4c4c494;
-  cursor: not-allowed;
-}
-.chronicles-container-wrapper * {
-  transition: 0.25s;
-}
-.chronicles-child-body {
-  margin: 5px 0 0 0;
-  color: white;
-  font-size: 16px;
-}
-.chronicles-container-wrapper * {
-  transition: 0.25s;
-}
-.chronicles-shadow.left {
-  left: 0;
-  background-image: linear-gradient(to left, rgba(255, 255, 255, 0), #ffffff);
-}
-.chronicles-shadow {
-  position: absolute;
-  top: 0;
-  width: 80px;
-  height: 100%;
-  pointer-events: none;
-}
-.chronicles-shadow.right {
-  left: calc(100% - 80px);
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), #ffffff);
-}
-#chronicles-container::-webkit-scrollbar {
-  height: 5px;
-}
+/* 时间线（迭代时间线）的样式在 css/timeline.css，这里只保留外壳背景 */
 div ::-webkit-scrollbar {
   width: 5px;
   background-color: rgba(211, 211, 211, 0.299);
@@ -644,13 +571,15 @@ body {
   height: 82px;
   box-shadow: rgb(0 0 0 / 10%) 0 5px 20px;
 }
+/* 顶部导航：z-index 要高于各区块内容（海报、时间线箭头等），
+   否则滚动到这些区块时会被内容盖住 */
 #navTopMenu {
   position: fixed;
   top: 0;
   width: 100%;
   height: 100px;
   transition: 0.25s;
-  z-index: 1;
+  z-index: 100;
 }
 #navMenuDiv {
   position: absolute;
@@ -674,6 +603,13 @@ body {
   line-height: 45px;
   display: inline-block;
   width: 200px;
+  cursor: pointer;
+}
+/* 键盘聚焦时给个可见的绿色描边（默认 outline 在这里太突兀） */
+#logoContent:focus-visible {
+  outline: 2px solid rgba(76, 216, 79, 0.6);
+  outline-offset: 4px;
+  border-radius: 8px;
 }
 #moreBtn {
   cursor: pointer;
@@ -695,6 +631,14 @@ body {
   border-radius: 5px;
   color: #fff;
   font-size: 17px;
+}
+/* 导航项从 6 个加到 7 个后，窄一点的桌面会把 Logo 挤到，这里收一下间距 */
+@media (min-width: 769px) and (max-width: 1180px) {
+  #navTopMenu .hrefText {
+    margin: 0 4px;
+    padding: 10px 12px;
+    font-size: 15px;
+  }
 }
 .hrefText {
   position: relative;
@@ -871,7 +815,7 @@ h3 {
 }
 .curTag {
   position: relative;
-  margin-top: 50px;
+  margin-top: 40px;
   width: 100%;
   font-size: small;
 }
@@ -933,22 +877,6 @@ footer a:hover {
 ::-webkit-scrollbar {
   width: 0px;
   height: 5px;
-}
-
-#topBtn{
-  position: fixed;
-  bottom: 50px;
-  right: 50px;
-  width: 50px;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  opacity: 0.5;
-  cursor: pointer;
-  z-index: 999;
-}
-#topBtn:hover {
-  opacity: 1 !important;
 }
 
 /* 通用玻璃面板（由 index.html 中的内联样式抽取，PC 端表现保持一致；

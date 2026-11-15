@@ -25,13 +25,6 @@ function getPageScrollTop() {
   )
 }
 
-function getPageScrollHeight() {
-  return Math.max(
-    document.documentElement.scrollHeight || 0,
-    document.body.scrollHeight || 0
-  )
-}
-
 function scrollPageTo(y) {
   var top = Math.max(0, Math.round(y))
   try {
@@ -69,6 +62,10 @@ function onPageScroll(handler) {
 }
 
 getDomById("scrollDownIcon").onclick = () => {
+  scrollToDom(getDomById("skill"));
+};
+
+getDomById("skillText").onclick = () => {
   scrollToDom(getDomById("skill"));
 };
 
@@ -144,11 +141,7 @@ document.querySelector('#openSaturn').onclick = () => {
 document.querySelector('#copyright p b').innerText = `©${new Date().getFullYear()} 权朝阳`
 
 setTimeout(() => {
-  const logDom = document.querySelector('#chronicles-container')
-  if (logDom) {
-    logDom.scrollLeft = logDom.scrollWidth
-  }
-  // 流程年份
+  // 流程年份（时间线默认从最早一条开始，横向滚动逻辑见 js/timeline.js）
   const thisYear = new Date().getFullYear();
   const yearDom = document.getElementById('this-year');
   if (yearDom) {
@@ -213,67 +206,21 @@ setInterval(function () {
   date();
 }, 1000);
 
-// “回到顶部”图标逻辑：底部显示，点击平滑回顶，到顶隐藏
-(function initTopBtn() {
-  const topBtn = getDomById("topBtn");
-  if (!topBtn) return;
+// 点击左上角头像 / QuanCY 字母回到页面顶部
+(function initLogoToTop() {
+  const logo = getDomById("logoContent");
+  if (!logo) return;
 
-  // 阻尼与显示阈值（可按需调整）
-  const damping = 0.5;      // 位移减速比例（0.3~0.6 推荐）
+  const backToTop = () => scrollPageTo(0);
 
-  let isAutoScroll = false;
-  let startTop = 0;
-
-  const getScrollTop = () => getPageScrollTop();
-  const getScrollHeight = () => getPageScrollHeight();
-  // 注意：quirks 模式下移动端的 documentElement.clientHeight 会返回内容总高度，
-  // 这里优先取 window.innerHeight（真实可视高度）
-  const getClientHeight = () =>
-    window.innerHeight || document.documentElement.clientHeight;
-
-  // 点击平滑回顶，同时图标跟随上升（减速）
-  topBtn.addEventListener("click", () => {
-    startTop = getScrollTop();
-    isAutoScroll = true;
-    topBtn.style.opacity = "0.5";
-    topBtn.style.pointerEvents = "none";
-    scrollPageTo(0);
-  });
-
-  const updateTopBtn = () => {
-    const currentTop = getScrollTop();
-    const nearBottom =
-      Math.ceil(currentTop + getClientHeight()) >= getScrollHeight() * 0.98;
-    const atTop = currentTop <= 0;
-
-    if (isAutoScroll) {
-      // 已上升距离，并按阻尼减速位移
-      const delta = Math.max(0, startTop - currentTop);
-      topBtn.style.transform = `translateY(${-delta * damping}px)`;
-
-      if (atTop) {
-        isAutoScroll = false;
-        topBtn.style.opacity = "0";
-        topBtn.style.pointerEvents = "none";
-        topBtn.style.transform = "translateY(0)";
-      } else {
-        topBtn.style.opacity = "0.5";
-      }
-    } else {
-      // 非自动滚动：只在靠近底部时显示
-      topBtn.style.transform = "translateY(0)";
-      if (nearBottom) {
-        topBtn.style.opacity = "0.5";
-        topBtn.style.pointerEvents = "auto";
-      } else {
-        topBtn.style.opacity = "0";
-        topBtn.style.pointerEvents = "none";
-      }
+  logo.addEventListener("click", backToTop);
+  // 键盘也能触发（回车 / 空格）
+  logo.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      backToTop();
     }
-  };
-
-  updateTopBtn();
-  onPageScroll(updateTopBtn);
+  });
 })();
 
 

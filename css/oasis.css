@@ -1,0 +1,251 @@
+/* ==========================================================================
+   绿洲 —— 影单海报墙
+   注意：只做“外观”层面的设计，不碰 .cover / .hero / .title 的 hover 变换，
+        也不碰台词弹层的任何样式（那些在 css/3d-card.css 与 css/easterEgg.css）。
+   ========================================================================== */
+
+#oasisSection {
+  position: relative;
+}
+
+/* 背景光晕：海报墙后面的一层很淡的绿色/蓝色空气感 */
+#oasisSection::before {
+  content: "";
+  position: absolute;
+  left: 16%;
+  right: 2%;
+  top: 8%;
+  bottom: 6%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 58% 46% at 56% 42%, rgba(76, 216, 79, 0.08), transparent 70%),
+    radial-gradient(ellipse 46% 40% at 22% 64%, rgba(64, 128, 255, 0.055), transparent 70%);
+}
+
+/* 内容需要盖在背景光晕之上：用定位 + DOM 顺序即可，
+   这里不能给 z-index，否则会抽出到根层叠上下文、盖住固定导航 */
+#oasisSection .musicBody,
+#oasisSection .favorite-body {
+  position: relative;
+}
+
+/* ---------- 左侧标题块 ---------- */
+.oasis-head {
+  align-content: center;
+  justify-content: start;
+  text-align: left;
+  padding-left: 6px;
+}
+
+.oasis-kicker {
+  margin: 0 0 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  color: rgba(76, 216, 79, 0.82);
+}
+
+#oasisSection .ev-module-edit-box1 {
+  font-size: 42px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+#oasisSection .ev-module-edit-box2 {
+  width: 46px;
+  height: 2px;
+  margin-top: 16px;
+}
+
+#oasisSection .ev-module-edit-box3 {
+  margin-top: 14px;
+  font-size: 26px;
+  letter-spacing: 0.14em;
+}
+
+.oasis-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 20px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.oasis-meta b {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  color: #4cd84f;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 提示做成一个小胶囊，暗示“可以点” */
+.oasis-tip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 22px 0 0;
+  padding: 8px 14px;
+  border: 1px dashed rgba(76, 216, 79, 0.34);
+  border-radius: 999px;
+  background: rgba(76, 216, 79, 0.05);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.6);
+  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+}
+
+.oasis-tip-dot {
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4cd84f;
+  box-shadow: 0 0 8px rgba(76, 216, 79, 0.9);
+  animation: oasisDot 2.6s ease-in-out infinite;
+}
+
+@keyframes oasisDot {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+#oasisSection:hover .oasis-tip {
+  border-color: rgba(76, 216, 79, 0.55);
+  background: rgba(76, 216, 79, 0.09);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ---------- 海报：描边 + 落影 + hover 光斑 ---------- */
+#oasisSection .book-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 15px;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 26px 50px -20px rgba(0, 0, 0, 0.9);
+  transition: box-shadow 0.35s ease;
+}
+
+#oasisSection .book-card:hover::after {
+  box-shadow: 0 0 0 1px rgba(76, 216, 79, 0.35), 0 30px 60px -20px rgba(0, 0, 0, 0.95),
+    0 0 44px -12px rgba(76, 216, 79, 0.3);
+}
+
+@media (min-width: 769px) {
+  /* 海报墙：恢复原来的 25% / 75% 布局占比 */
+  #oasisSection .favorite-body {
+    grid-template-columns: 25% 75%;
+    column-gap: 0;
+  }
+
+  #oasisSection .card-list {
+    position: relative;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 1fr);
+    align-items: start;
+    gap: 15px;
+    margin-top: 120px;
+  }
+
+  /* 卡片保持原来的 195×270，列窄时等比收缩，列宽时不再放大 */
+  #oasisSection .book-card {
+    width: min(195px, 100%);
+    margin: 0 auto;
+    aspect-ratio: 195 / 270;
+  }
+
+  #oasisSection .book-card .cover {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* hover 时海报后面浮起一层绿色光斑（纯装饰，不影响动效） */
+  #oasisSection .book-card::before {
+    content: "";
+    position: absolute;
+    inset: -24% -20%;
+    z-index: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 55%, rgba(76, 216, 79, 0.2), transparent 62%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+
+  #oasisSection .book-card:hover::before {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oasis-tip-dot {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   移动端
+   ========================================================================== */
+@media (max-width: 768px) {
+  #oasisSection::before {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse 70% 40% at 50% 30%, rgba(76, 216, 79, 0.07), transparent 70%);
+  }
+
+  .oasis-head {
+    padding-left: 0;
+  }
+
+  .oasis-kicker {
+    margin-bottom: 8px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+  }
+
+  #oasisSection .ev-module-edit-box1 {
+    font-size: 30px;
+  }
+
+  #oasisSection .ev-module-edit-box2 {
+    width: 38px;
+    margin-top: 10px;
+  }
+
+  #oasisSection .ev-module-edit-box3 {
+    margin-top: 8px;
+    font-size: 20px;
+  }
+
+  .oasis-meta {
+    margin-top: 12px;
+    font-size: 11px;
+  }
+
+  .oasis-meta b {
+    font-size: 15px;
+  }
+
+  .oasis-tip {
+    margin-top: 14px;
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  #oasisSection .book-card::after {
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 16px 34px -18px rgba(0, 0, 0, 0.85);
+  }
+}

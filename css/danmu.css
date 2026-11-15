@@ -1,53 +1,107 @@
-.danmu-body{
-    color: #fff;
-    font-size: 15px;
-    background: linear-gradient(to right, black, transparent);
-    background-size: 100% 125%;
-    padding: 10px 12px;
-    border-radius: 25px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 350px;
+/* ==========================================================================
+   弹幕气泡 —— Matrix 终端风格
+   只保留气泡（.danmu-body / .danmu-body-new）的样式，
+   弹幕区域本身的容器恢复成原来的 #danmu，不再额外包一层外框。
+   ========================================================================== */
+
+#danmu .danmu-body {
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: #d9ffe6;
+  background: rgba(6, 24, 18, 0.74);
+  border: 1px solid rgba(76, 216, 79, 0.34);
+  border-radius: 6px;
+  padding: 7px 12px 7px 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 350px;
+  text-shadow: 0 0 10px rgba(76, 216, 79, 0.3);
+  box-shadow: 0 0 22px -10px rgba(76, 216, 79, 0.55), inset 0 0 14px rgba(76, 216, 79, 0.05);
 }
 
-.danmu-body-new{
-    color: #fff;
-    font-size: 20px;
-    background: linear-gradient(to right, rgb(33, 212, 253), transparent);
-    background-size: 100% 125%;
-    padding: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border-radius: 40px;
-    max-width: 380px;
-    /* box-shadow: 1px 1px 5px rgb(33, 212, 253); */
+/* 刚发出来的新弹幕：更亮的绿边 + 呼吸光晕 */
+#danmu .danmu-body-new {
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 15px;
+  color: #eafff2;
+  background: rgba(14, 48, 28, 0.9);
+  border: 1px solid rgba(125, 255, 154, 0.8);
+  border-radius: 6px;
+  padding: 8px 13px 8px 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 380px;
+  text-shadow: 0 0 12px rgba(125, 255, 154, 0.4);
+  box-shadow: 0 0 0 1px rgba(125, 255, 154, 0.15), 0 0 30px -6px rgba(125, 255, 154, 0.7);
+  animation: danmuNewGlow 1.8s ease-in-out infinite alternate;
 }
 
-.danmu-body-new img {
-    width: 40px;
-    height: 40px;
+@keyframes danmuNewGlow {
+  from {
+    box-shadow: 0 0 0 1px rgba(125, 255, 154, 0.14), 0 0 18px -8px rgba(125, 255, 154, 0.5);
+  }
+  to {
+    box-shadow: 0 0 0 1px rgba(125, 255, 154, 0.24), 0 0 34px -4px rgba(125, 255, 154, 0.85);
+  }
 }
 
-.danmu-body img {
-    width: 30px;
-    height: 30px;
+@media (prefers-reduced-motion: reduce) {
+  #danmu .danmu-body-new {
+    animation: none;
+  }
 }
 
-.avatar-img{
-    border-radius: 50%;
-    vertical-align: middle;
+#danmu .avatar-img {
+  width: 24px;
+  height: 24px;
+  margin-right: 7px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(76, 216, 79, 0.45);
+  vertical-align: middle;
 }
 
-.danmu-content-text{
-    vertical-align: middle;
+#danmu .danmu-body-new .avatar-img {
+  width: 30px;
+  height: 30px;
 }
 
-.green-name{
-    color: #63de8d;
+/* 昵称绿色 + 终端提示符 */
+#danmu .danmu-content-text > span {
+  color: #7dff9a;
+  font-weight: 600;
 }
 
-.red-name{
-    color: #ff8484;
+#danmu .danmu-content-text::before {
+  content: "› ";
+  color: rgba(125, 255, 154, 0.7);
+}
+
+/* ==========================================================================
+   移动端
+   ========================================================================== */
+@media (max-width: 768px) {
+  #danmu .danmu-body {
+    font-size: 12px;
+    padding: 5px 9px 5px 8px;
+    max-width: 230px;
+  }
+
+  #danmu .danmu-body-new {
+    font-size: 13px;
+    padding: 6px 10px 6px 9px;
+    max-width: 250px;
+  }
+
+  #danmu .avatar-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+  }
+
+  #danmu .danmu-body-new .avatar-img {
+    width: 24px;
+    height: 24px;
+  }
 }

@@ -265,14 +265,16 @@
     backdrop-filter: none !important;
   }
 
+  /* 移动端地图：高度收紧，让地图与图例更紧凑 */
   #map {
-    height: 56vh;
-    height: min(58vh, 460px);
-    min-height: 320px;
+    height: 46vh;
+    height: min(48vh, 400px);
+    min-height: 300px;
   }
 
+  /* 地图下方的“毛玻璃留白条”在移动端只会形成一条突兀的分界线，直接去掉 */
   .mapBlank {
-    height: 16px;
+    display: none;
   }
 
   /* ============ 印象 / 音乐 ============ */
@@ -478,68 +480,11 @@
     width: 100%;
   }
 
-  /* ============ 时间线：移动端改为纵向 ============ */
-  #chronicles {
-    padding: 44px 0 56px 0;
-  }
-
+  /* ============ 时间线（布局在 css/timeline.css 里） ============ */
   #sitTip {
     margin-top: 12px;
     padding: 0 16px;
     font-size: 13px;
-  }
-
-  .chronicles-container-wrapper {
-    left: 0;
-    width: 100%;
-    margin-top: 22px;
-    padding: 0 24px;
-    overflow: visible;
-  }
-
-  /* 按内容宽度收紧后整体水平居中（时间轴线 + 文字作为一块居中） */
-  #chronicles-container {
-    width: -moz-fit-content;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    white-space: normal;
-    overflow: visible;
-    padding: 2px 0 2px 18px;
-    border-left: 2px solid rgba(76, 216, 79, 0.35);
-  }
-
-  #chronicles-container div {
-    display: block;
-    margin: 0 0 20px 0;
-    position: relative;
-    text-align: left;
-  }
-
-  #chronicles-container div:last-child {
-    margin-bottom: 0;
-  }
-
-  #chronicles-container div::before {
-    content: "";
-    position: absolute;
-    left: -23px;
-    top: 6px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background-color: #4cd84f;
-    box-shadow: 0 0 0 3px rgba(76, 216, 79, 0.16);
-  }
-
-  .chronicles-child-lineTime,
-  .chronicles-child-fade-out {
-    font-size: 15px;
-  }
-
-  .chronicles-child-body {
-    font-size: 14px;
-    line-height: 1.5;
   }
 
   /* ============ 留言 / 弹幕 ============ */
@@ -610,18 +555,6 @@
 
   .contributionAutor {
     bottom: 6px;
-  }
-
-  /* 用 top + vh 定位：quirks 模式下 innerHeight 与实际可视高度不一致，
-     用 bottom 定位会被推到屏幕外；dvh 可跟随移动端地址栏伸缩 */
-  #topBtn {
-    top: calc(100vh - 54px - env(safe-area-inset-bottom));
-    top: calc(100dvh - 54px - env(safe-area-inset-bottom));
-    bottom: auto;
-    left: calc(100vw - 50px);
-    right: auto;
-    width: 38px;
-    z-index: 990;
   }
 
   /* ============ 加载动画 ============ */

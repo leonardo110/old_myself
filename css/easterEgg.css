@@ -1,0 +1,253 @@
+/* ==========================================================================
+   彩蛋系统
+   1. 台词卡：点击「绿洲」海报弹出
+   2. 矩阵雨：键盘输入 matrix（或 ↑↑↓↓←→←→BA）开启
+   ========================================================================== */
+
+/* 海报现在是可点的，给个手型 + 一句引导 */
+.book-card {
+  cursor: pointer;
+}
+
+.oasis-tip {
+  margin: 16px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.48);
+  text-align: left;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   台词卡
+   ========================================================================== */
+/* 注意：不做 overflow 锁滚动 —— PC 端 body 本身是滚动容器，
+   给它设 overflow:hidden 会把页面弹回顶部，所以只用遮罩盖住背景。 */
+.quote-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9995;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.quote-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.quote-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 7, 12, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.quote-card {
+  position: relative;
+  box-sizing: border-box;
+  width: min(540px, 100%);
+  padding: 38px 34px 26px;
+  border: 1px solid rgba(76, 216, 79, 0.38);
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(10, 18, 26, 0.97), rgba(6, 12, 18, 0.98));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+  overflow: hidden;
+}
+
+.quote-modal.is-open .quote-card {
+  transform: none;
+}
+
+.quote-card::after {
+  content: "";
+  position: absolute;
+  left: 34px;
+  right: 34px;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4cd84f, transparent);
+  opacity: 0.55;
+}
+
+.quote-mark {
+  position: absolute;
+  top: 2px;
+  left: 20px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 96px;
+  line-height: 1;
+  color: rgba(76, 216, 79, 0.16);
+  pointer-events: none;
+}
+
+.quote-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.55) !important;
+  transition: color 0.2s;
+}
+
+.quote-close:hover {
+  color: #4cd84f !important;
+}
+
+.quote-kicker {
+  position: relative;
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.quote-kicker span {
+  color: #4cd84f;
+}
+
+.quote-en {
+  position: relative;
+  margin: 0 0 14px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.quote-zh {
+  position: relative;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.quote-foot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.quote-year {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.quote-next {
+  padding: 8px 16px;
+  border: 1px solid rgba(76, 216, 79, 0.45);
+  border-radius: 999px;
+  background: rgba(76, 216, 79, 0.1);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  color: #7ff19a !important;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+
+.quote-next:hover {
+  background: rgba(76, 216, 79, 0.2);
+}
+
+/* ==========================================================================
+   矩阵雨彩蛋
+   ========================================================================== */
+.matrix-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.matrix-rain.is-on {
+  opacity: 0.5;
+}
+
+.mx-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  z-index: 9999;
+  padding: 10px 20px;
+  border: 1px solid rgba(76, 216, 79, 0.45);
+  border-radius: 999px;
+  background: rgba(6, 12, 18, 0.9);
+  color: #9dffbf;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.mx-toast.is-on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ==========================================================================
+   移动端
+   ========================================================================== */
+@media (max-width: 768px) {
+  .oasis-tip {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+
+  .quote-card {
+    width: 100%;
+    padding: 30px 22px 20px;
+    border-radius: 16px;
+  }
+
+  .quote-mark {
+    font-size: 72px;
+  }
+
+  .quote-en {
+    font-size: 17px;
+  }
+
+  .quote-zh {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .quote-foot {
+    margin-top: 18px;
+  }
+
+  .mx-toast {
+    bottom: 24px;
+    font-size: 12px;
+    max-width: 90vw;
+    white-space: normal;
+    text-align: center;
+  }
+}

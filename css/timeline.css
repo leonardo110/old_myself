@@ -1,0 +1,422 @@
+/* ==========================================================================
+   迭代时间线 —— 横向轨道 / 卡片节点
+   在 css/mobile.css 之后加载，PC 与移动端都走这一套（移动端尺寸更紧凑）。
+   ========================================================================== */
+
+#chronicles {
+  /* 覆盖父级的 font-size: 0（那是给 inline-block 排版用的） */
+  font-size: 14px;
+  padding: 56px 0 72px;
+}
+
+#chronicles h3 {
+  margin: 0 0 18px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+}
+
+#sitTip {
+  margin: 18px 0 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ---------- 轨道容器 ---------- */
+.chronicles-container-wrapper {
+  position: relative;
+  left: 0;
+  width: min(1180px, 92vw);
+  margin: 34px auto 0;
+  overflow: visible;
+  /* 让内部的箭头 / 进度条 z-index 留在本区块内，不会盖住固定导航 */
+  isolation: isolate;
+}
+
+.chronicles-track {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  padding: 4px 24px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  counter-reset: chronicle;
+  user-select: none;
+  /* 两端渐隐，卡片滑到边缘时自然淡出（左右箭头正好落在渐隐区里） */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+}
+
+.chronicles-track::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* 拖动时不要吸附，手感更顺 */
+.chronicles-track.is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+}
+
+/* ---------- 单个节点 ---------- */
+.chronicle-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 212px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+  scroll-snap-align: start;
+  cursor: grab;
+}
+
+/* 贯穿所有节点的横向轨道线（贴着圆点中心） */
+.chronicle-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.chronicle-card {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 16px 16px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012));
+  text-align: left;
+  transition: border-color 0.28s ease, transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+/* 右上角序号 01 / 02 … */
+.chronicle-card::before {
+  counter-increment: chronicle;
+  content: counter(chronicle, decimal-leading-zero);
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.22);
+  transition: color 0.28s ease;
+}
+
+.chronicle-date {
+  display: block;
+  padding-right: 24px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: #4cd84f;
+}
+
+.chronicles-child-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 卡片到轨道之间的连接杆 + 圆点 */
+.chronicle-stem {
+  z-index: 1;
+  width: 1px;
+  height: 22px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(76, 216, 79, 0.55));
+}
+
+.chronicle-dot {
+  z-index: 2;
+  width: 9px;
+  height: 9px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #4cd84f;
+  box-shadow: 0 0 0 3px rgba(76, 216, 79, 0.16), 0 0 10px rgba(76, 216, 79, 0.45);
+  transition: box-shadow 0.28s ease;
+}
+
+/* ---------- 悬停 ---------- */
+.chronicle-item:hover .chronicle-card {
+  border-color: rgba(76, 216, 79, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+}
+
+.chronicle-item:hover .chronicle-card::before {
+  color: rgba(76, 216, 79, 0.75);
+}
+
+.chronicle-item:hover .chronicle-dot {
+  box-shadow: 0 0 0 4px rgba(76, 216, 79, 0.22), 0 0 14px rgba(76, 216, 79, 0.7);
+}
+
+.chronicle-item:hover .chronicle-stem {
+  background: linear-gradient(180deg, rgba(76, 216, 79, 0.35), rgba(76, 216, 79, 0.85));
+}
+
+/* ---------- 最后一个「施工中」节点 ---------- */
+.chronicle-item.is-pending .chronicle-card {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.chronicle-item.is-pending .chronicle-card::before {
+  content: none;
+}
+
+.chronicle-item.is-pending .chronicle-date,
+.chronicle-item.is-pending .chronicles-child-body {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.chronicle-item.is-pending .chronicle-dot {
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  animation: chroniclePulse 2.4s ease-in-out infinite;
+}
+
+.chronicle-item.is-pending::after {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.16) 0 5px,
+    transparent 5px 11px
+  );
+}
+
+@keyframes chroniclePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.03), 0 0 14px rgba(255, 255, 255, 0.35);
+  }
+}
+
+/* ---------- 左右箭头 ---------- */
+.chronicles-nav {
+  position: absolute;
+  top: 42%;
+  z-index: 4;
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(8, 14, 22, 0.92);
+  color: #fff !important;
+  cursor: pointer;
+  transition: opacity 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chronicles-nav svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+}
+
+.chronicles-nav:hover {
+  border-color: rgba(76, 216, 79, 0.55);
+  background: rgba(76, 216, 79, 0.18);
+}
+
+.chronicles-nav[disabled] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chronicles-nav.is-prev {
+  left: -16px;
+}
+
+.chronicles-nav.is-next {
+  right: -16px;
+}
+
+/* ---------- 底部：提示 + 滚动进度 ---------- */
+.chronicles-foot {
+  width: min(1180px, 92vw);
+  margin: 22px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.chronicles-hint {
+  flex: 0 0 auto;
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  transition: opacity 0.4s ease;
+}
+
+.chronicles-hint.is-hidden {
+  opacity: 0;
+}
+
+/* 右下角的迷你滚动条，避免和时间线轨道抢视觉 */
+.chronicles-progress {
+  position: relative;
+  flex: 0 0 180px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.chronicles-progress span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 20%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(76, 216, 79, 0.45), #4cd84f);
+  box-shadow: 0 0 10px rgba(76, 216, 79, 0.45);
+  transition: width 0.2s ease, transform 0.12s linear;
+}
+
+/* ==========================================================================
+   移动端
+   ========================================================================== */
+@media (max-width: 768px) {
+  #chronicles {
+    padding: 44px 0 56px;
+  }
+
+  #chronicles h3 {
+    margin-bottom: 14px;
+    font-size: 24px;
+  }
+
+  #sitTip {
+    margin-top: 14px;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+
+  .chronicles-container-wrapper {
+    width: 92vw;
+    margin-top: 26px;
+  }
+
+  .chronicles-track {
+    padding: 2px 12px 0;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 12px,
+      #000 calc(100% - 12px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 12px,
+      #000 calc(100% - 12px),
+      transparent 100%
+    );
+  }
+
+  .chronicle-item {
+    width: 158px;
+    padding: 0 6px;
+  }
+
+  .chronicle-card {
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 13px 13px 12px;
+    border-radius: 10px;
+  }
+
+  .chronicle-card::before {
+    top: 9px;
+    right: 10px;
+    font-size: 10px;
+  }
+
+  .chronicle-date {
+    padding-right: 20px;
+    font-size: 11px;
+  }
+
+  .chronicles-child-body {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .chronicle-stem {
+    height: 16px;
+  }
+
+  /* 手机上左右滑动更自然，不显示箭头 */
+  .chronicles-nav {
+    display: none;
+  }
+
+  .chronicles-foot {
+    width: 92vw;
+    margin-top: 16px;
+    gap: 12px;
+  }
+
+  .chronicles-hint {
+    font-size: 11px;
+  }
+
+  .chronicles-progress {
+    flex: 0 0 110px;
+  }
+}
+
+/* 平板：卡片比手机宽一点，避免文字挤成三行 */
+@media (min-width: 561px) and (max-width: 768px) {
+  .chronicle-item {
+    width: 198px;
+  }
+
+  .chronicle-card {
+    padding: 15px 15px 14px;
+  }
+
+  .chronicles-child-body {
+    font-size: 14px;
+  }
+}

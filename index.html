@@ -18,8 +18,19 @@
     <link rel="stylesheet" href="./css/3d-card.css">
     <link rel="stylesheet" href="./css/waline.min.css">
     <link rel="stylesheet" href="./css/danmu.css">
+    <link rel="stylesheet" href="./css/easterEgg.css">
     <!-- 移动端适配（仅在窄屏生效，不影响 PC 端样式） -->
     <link rel="stylesheet" href="./css/mobile.css">
+    <!-- 迭代时间线（横向轨道） -->
+    <link rel="stylesheet" href="./css/timeline.css">
+    <!-- 技能：技术栈地图 -->
+    <link rel="stylesheet" href="./css/skill.css">
+    <!-- 足迹：HUD 地图 -->
+    <link rel="stylesheet" href="./css/map.css">
+    <!-- 绿洲：影单海报墙 -->
+    <link rel="stylesheet" href="./css/oasis.css">
+    <!-- 印象：播放器 + 标签 -->
+    <link rel="stylesheet" href="./css/impression.css">
     <title>权朝阳&nbsp;&nbsp;|&nbsp;&nbsp;矩阵革命</title>
     <script>
     var _hmt = _hmt || [];
@@ -37,7 +48,20 @@
   </head>
   <body>
     <!-- 加载UI -->
-    <div class="loader"><span>L</span><span>O</span><span>A</span><span>D</span><span>I</span><span>N</span><span>G</span><span></span><span></span><span></span></div>
+    <div class="loader">
+      <div class="loader-inner">
+        <div class="loader-badge">
+          <div class="loader-ring2"></div>
+          <div class="loader-ring"></div>
+          <img src="./img/Normal/avatar.png" class="loader-avatar" alt="">
+        </div>
+        <p class="loader-brand"><b>Q</b>uanCY</p>
+        <p class="loader-sub">SYSTEM BOOT · 正在加载</p>
+        <div class="loader-bar"><div class="loader-fill"></div></div>
+        <p class="loader-status"><b id="loaderPct">0</b>%<em id="loaderPhase">初始化</em></p>
+      </div>
+    </div>
+    <script src="./js/loader.js"></script>
     <div id="contentPage">
       <!-- 背景 -->
       <div id="myselfGroundImg">
@@ -45,7 +69,7 @@
       </div>
         <div id="navTopMenu">
           <span id="navMenuDiv">
-            <span id="logoContent">
+            <span id="logoContent" role="button" tabindex="0" aria-label="回到顶部">
               <img src="./img/Normal/avatar.png" class="avator-class" alt="权朝阳">
               <span style="vertical-align: middle;"><span style="color: #4cd84f;">Q</span>uanCY</span>
             </span>
@@ -56,6 +80,7 @@
           </button>
           <nav id="hrefDiv">
             <a class="hrefText" href="https://new.quancy.cn">新版2.0</a>
+            <a class="hrefText" id="skillText">技能</a>
             <a class="hrefText" id="aboutText">印象</a>
             <a class="hrefText" id="favorite">绿洲</a>
             <a class="hrefText" id="footmarkText">足迹</a>
@@ -79,13 +104,39 @@
         <!-- 技能 -->
         <section>
           <div id="skill">
-            <div class="glass-panel">
-              <div class='chartsWrapper' id='link'></div>
+            <div class="skill-panel">
+              <div class="skill-head">
+                <div class="skill-heading">
+                  <h3>技能</h3>
+                  <p class="skill-sub">Web 三剑客：HTML（骨骼）、CSS（皮肤）、JavaScript（灵魂）</p>
+                </div>
+                <p class="skill-meta" id="skillMeta"></p>
+              </div>
+              <div class="skill-stage">
+                <div class="skill-web" id="skillWeb" aria-label="技术栈关系图"></div>
+                <div class="skill-hud" aria-hidden="true">
+                  <span class="skill-corner tl"></span>
+                  <span class="skill-corner tr"></span>
+                  <span class="skill-corner bl"></span>
+                  <span class="skill-corner br"></span>
+                </div>
+                <p class="skill-counter" id="skillCounter" aria-hidden="true"></p>
+                <div class="skill-legend" aria-hidden="true">
+                  <span><i class="lg-core"></i>主干</span>
+                  <span><i class="lg-tech"></i>分支</span>
+                  <span><i class="lg-link"></i>依赖</span>
+                </div>
+                <div class="skill-readout" aria-live="polite">
+                  <p class="skill-readout-kicker">TECH GRAPH</p>
+                  <p class="skill-readout-name" id="skillReadoutName">—</p>
+                  <p class="skill-readout-meta" id="skillReadoutMeta">悬停任意节点查看关系</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
         <!-- 印象 -->
-        <section class="like-card">
+        <section class="like-card" id="impressionSection">
           <div class="musicBody">
             <div class="musicDiv" id="musicId">
               <div id="app-cover">
@@ -136,6 +187,7 @@
               </div>
             </div>
             <div id="tagContent">
+              <p class="imp-kicker">IMPRESSIONS</p>
               <h3 id="myselfDiv">印象</h3>
               <span class="lineBottom"></span>
               <div class="curTag">
@@ -153,10 +205,11 @@
           </div>
         </section>
         <!-- 绿洲 -->
-        <section class="like-card">
+        <section class="like-card" id="oasisSection">
           <div class="musicBody">
             <div class="favorite-body">
-              <div class="ev-module-edit">
+              <div class="ev-module-edit oasis-head">
+                <p class="oasis-kicker">FILM COLLECTION</p>
                 <div class="ev-module-edit-box1">
                   <strong>Oasis</strong>
                 </div>
@@ -164,6 +217,9 @@
                 <div class="ev-module-edit-box3">
                   <strong>绿洲</strong>
                 </div>
+                <!-- 数量与下方 .book-card 个数保持一致 -->
+                <p class="oasis-meta"><b>10</b><span>部影片</span></p>
+                <p class="oasis-tip"><span class="oasis-tip-dot" aria-hidden="true"></span>点海报，抽一句台词</p>
               </div>
               <div class="card-list">
                 <div class="book-card" title="守望者">
@@ -223,7 +279,43 @@
         <!-- 地图 -->
         <section>
           <div class="mapMark glass-panel">
-            <div class='chartsWrapper' id='map'></div>
+            <div class="map-stage" id="mapStage">
+              <div class="chartsWrapper" id="map"></div>
+              <div class="map-grid" aria-hidden="true"></div>
+              <div class="map-scan" aria-hidden="true"></div>
+              <span class="map-corner tl" aria-hidden="true"></span>
+              <span class="map-corner tr" aria-hidden="true"></span>
+              <span class="map-corner bl" aria-hidden="true"></span>
+              <span class="map-corner br" aria-hidden="true"></span>
+              <header class="map-head">
+                <div class="map-heading">
+                  <h3>足迹</h3>
+                  <p class="map-kicker">TRAVEL LOG · 自西安出发</p>
+                </div>
+                <p class="map-tip">Tip: 台湾是中国领土不可分割的一部分</p>
+              </header>
+              <div class="map-stats" id="mapStats"></div>
+              <div class="map-legend" aria-hidden="true">
+                <span>1 次</span>
+                <i></i>
+                <span>4 次</span>
+              </div>
+              <p class="map-hint">
+                <span class="map-hint-pc">拖拽平移 · 滚轮缩放 · 点击城市聚焦</span>
+                <span class="map-hint-m">点击城市查看详情</span>
+              </p>
+              <button class="map-tour" id="mapTour" type="button" aria-pressed="false">
+                <svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <span>自动巡航</span>
+              </button>
+              <aside class="map-card" id="mapCard" aria-hidden="true">
+                <button class="map-card-close" id="mapCardClose" type="button" aria-label="关闭">×</button>
+                <p class="map-card-kicker">CITY FOCUS</p>
+                <strong class="map-card-name" id="mapCardName"></strong>
+                <p class="map-card-meta" id="mapCardMeta"></p>
+                <p class="map-card-route" id="mapCardRoute"></p>
+              </aside>
+            </div>
             <div class="mapBlank"></div>
           </div>
         </section>
@@ -233,56 +325,122 @@
           <span class="divLine"></span>
           <p id="sitTip"></p>
           <div class="chronicles-container-wrapper">
-            <div id="chronicles-container">
-              <div>
-                <p class="chronicles-child-lineTime">2023-05-21</p>
-                <p class="chronicles-child-body">注册「quancy.cn」域名</p>
+            <div class="chronicles-track" id="chronicles-container" tabindex="0" aria-label="迭代时间线，可左右滚动">
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2023-05-21</span>
+                  <p class="chronicles-child-body">注册「quancy.cn」域名</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2023-06-09</p>
-                <p class="chronicles-child-body">网站初版v1.0页面上线</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2023-06-09</span>
+                  <p class="chronicles-child-body">网站初版v1.0页面上线</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2023-09-19</p>
-                <p class="chronicles-child-body">网站使用2D WebGL渲染背景</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2023-09-19</span>
+                  <p class="chronicles-child-body">网站使用2D WebGL渲染背景</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2023-10-08</p>
-                <p class="chronicles-child-body">网站新增音乐模块</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2023-10-08</span>
+                  <p class="chronicles-child-body">网站新增音乐模块</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2023-10-19</p>
-                <p class="chronicles-child-body">网站新增留言板模块</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2023-10-19</span>
+                  <p class="chronicles-child-body">网站新增留言板模块</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2023-11-07</p>
-                <p class="chronicles-child-body">网站进行ICP备案</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2023-11-07</span>
+                  <p class="chronicles-child-body">网站进行ICP备案</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2023-11-28</p>
-                <p class="chronicles-child-body">网站使用全新UI界面2.0</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2023-11-28</span>
+                  <p class="chronicles-child-body">网站使用全新UI界面2.0</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2024-10-18</p>
-                <p class="chronicles-child-body">网站新增个人旅游足迹</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2024-10-18</span>
+                  <p class="chronicles-child-body">网站新增个人旅游足迹</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2025-03-05</p>
-                <p class="chronicles-child-body">网站新增绿洲模块</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2025-03-05</span>
+                  <p class="chronicles-child-body">网站新增绿洲模块</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2025-05-20</p>
-                <p class="chronicles-child-body">网站新增弹幕功能</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2025-05-20</span>
+                  <p class="chronicles-child-body">网站新增弹幕功能</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div>
-                <p class="chronicles-child-lineTime">2025-06-12</p>
-                <p class="chronicles-child-body">重写技术栈关系图</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2025-06-12</span>
+                  <p class="chronicles-child-body">重写技术栈关系图</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
-              <div title="敬请期待...">
-                <p class="chronicles-child-fade-out" id="this-year"></p>
-                <p class="chronicles-child-fade-out">项目施工中...</p>
+              <div class="chronicle-item">
+                <div class="chronicle-card">
+                  <span class="chronicle-date">2026-11-15</span>
+                  <p class="chronicles-child-body">全站 UI 界面优化</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
+              </div>
+              <div class="chronicle-item is-pending" title="敬请期待...">
+                <div class="chronicle-card">
+                  <span class="chronicle-date" id="this-year"></span>
+                  <p class="chronicles-child-body">项目施工中...</p>
+                </div>
+                <span class="chronicle-stem" aria-hidden="true"></span>
+                <span class="chronicle-dot" aria-hidden="true"></span>
               </div>
             </div>
+            <button class="chronicles-nav is-prev" type="button" aria-label="往前看">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="chronicles-nav is-next" type="button" aria-label="往后看">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="chronicles-foot">
+            <p class="chronicles-hint">← 左右滑动查看 →</p>
+            <div class="chronicles-progress" aria-hidden="true"><span></span></div>
           </div>
         </div>
         <!-- 留言板/弹幕墙 -->
@@ -334,18 +492,20 @@
         <!-- 阅读量: <span class="waline-pageview-count" data-path="" /> -->
         <!-- <span class="busuanzispan">总阅读量 <span id="busuanzi_value_page_pv"></span> 次</span> -->
       </div>
-      <img src="./img/Normal/top.svg" alt="回到顶部" title="回到顶部" id="topBtn">
     </div>
     <script src="./js/require.js"></script>
     <script src="./js/nebulon.js"></script>
     <script src="./js/constant.js"></script>
     <script src="./js/mobile.js"></script>
     <script src="./js/site.js"></script>
+    <script src="./js/timeline.js"></script>
     <script src="./index.js"></script>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/music.js"></script>
-    <script src="./js/link.js"></script>
+    <script src="./js/skill.js"></script>
     <script src="./js/newMap.js"></script>
+    <script src="./js/quotes.js"></script>
+    <script src="./js/easterEgg.js"></script>
     <script type="module">
       import { init } from "./js/waline.min.js";
       init({

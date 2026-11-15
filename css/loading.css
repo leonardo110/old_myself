@@ -7,112 +7,202 @@ body{
     height: 100vh;
     background-color: black;
 }
-.loader{
-    /* 相对定位 */
-    position: relative;
-    width: 100%;
-    height: 60px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.loader span{
-    /* 绝对定位 */
-    position: absolute;
-    width: 30px;
-    height: 60px;
-    line-height: 60px;
-    margin: 0 10px;
-    color: white;
-    font-size: 40px;
-    text-align: center;
-    /* 默认旋转180度，不透明度为0 */
-    transform: rotate(180deg);
-    opacity: 0;
-    /* 执行动画：动画名 时长 线性的 无限次播放 */
-    animation: move 2.5s linear infinite;
-}
-.loader span::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -20px;
-    width: 30px;
-    height: 5px;
-    border-radius: 50%;
-    /* 投影效果+模糊 */
-    background-color: rgba(0,0,0,0.15);
-    filter: blur(1.5px);
-}
-/* 分别为每一个span这是动画延迟 */
-.loader span:nth-child(2){
-    animation-delay: 0.2s;
-}
-.loader span:nth-child(3){
-    animation-delay: 0.4s;
-}
-.loader span:nth-child(4){
-    animation-delay: 0.6s;
-}
-.loader span:nth-child(5){
-    animation-delay: 0.8s;
-}
-.loader span:nth-child(6){
-    animation-delay: 1s;
-}
-.loader span:nth-child(7){
-    animation-delay: 1.2s;
-}
-.loader span:nth-child(8){
-    animation-delay: 1.4s;
-}
-.loader span:nth-child(9){
-    animation-delay: 1.6s;
-}
-.loader span:nth-child(10){
-    animation-delay: 1.8s;
-}
-/* 最后面的三个圆的统一样式 */
-.loader span:nth-child(8)::before,
-.loader span:nth-child(9)::before,
-.loader span:nth-child(10)::before{
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 13px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-/* 为三个圆设置颜色 */
-.loader span:nth-child(8)::before{
-    background-color: #eccc68;
-}
-.loader span:nth-child(9)::before{
-    background-color: #7bed9f;
-}
-.loader span:nth-child(10)::before{
-    background-color: #ff6b81;
+
+/* ==========================================================================
+   加载动画 —— 矩阵风格启动页
+   ========================================================================== */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse 62% 52% at 50% 46%, rgba(12, 46, 32, 0.6), transparent 72%), #04070c;
+  transition: opacity 0.45s ease;
 }
 
-/* 定义动画 */
-@keyframes move {
-    0%{
-        right: 0;
-        opacity: 0;
-    }
-    35%{
-        right: 41%;
-        transform: rotate(0deg);
-        opacity: 1;
-    }
-    65%{
-        right: 59%;
-        transform: rotate(0deg);
-        opacity: 1;
-    }
-    100%{
-        right: 100%;
-        transform: rotate(-180deg);
-        opacity: 0;
-    }
+/* 网格底纹 */
+.loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(76, 216, 79, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76, 216, 79, 0.055) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(circle at 50% 46%, #000 10%, transparent 66%);
+  mask-image: radial-gradient(circle at 50% 46%, #000 10%, transparent 66%);
+}
+
+/* 扫描线 */
+.loader::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -180px;
+  height: 180px;
+  background: linear-gradient(180deg, transparent, rgba(76, 216, 79, 0.08), transparent);
+  animation: loaderScan 3.4s linear infinite;
+}
+
+@keyframes loaderScan {
+  to {
+    top: 100%;
+  }
+}
+
+.loader-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 头像 + 两层旋转环 */
+.loader-badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 10px;
+}
+
+.loader-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(76, 216, 79, 0.45), 0 0 34px rgba(76, 216, 79, 0.28);
+}
+
+.loader-ring,
+.loader-ring2 {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.loader-ring {
+  inset: -8px;
+  border: 2px solid transparent;
+  border-top-color: #4cd84f;
+  border-right-color: rgba(76, 216, 79, 0.25);
+  animation: loaderSpin 1.1s linear infinite;
+}
+
+.loader-ring2 {
+  inset: -18px;
+  border: 1px dashed rgba(76, 216, 79, 0.26);
+  animation: loaderSpin 7s linear infinite reverse;
+}
+
+@keyframes loaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 品牌字 */
+.loader-brand {
+  font-family: STLiti, serif;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+.loader-brand b {
+  color: #4cd84f;
+  font-weight: inherit;
+}
+
+.loader-sub {
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: rgba(125, 255, 154, 0.7);
+}
+
+/* 进度条 */
+.loader-bar {
+  position: relative;
+  width: 220px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.loader-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(46, 224, 106, 0.55), #9dffc0);
+  box-shadow: 0 0 14px rgba(76, 216, 79, 0.8);
+  animation: loaderFill 2.2s cubic-bezier(0.25, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes loaderFill {
+  to {
+    width: 100%;
+  }
+}
+
+/* 百分比 + 阶段文案 */
+.loader-status {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.loader-status b {
+  font-size: 14px;
+  font-weight: 600;
+  color: #7dff9a;
+  font-variant-numeric: tabular-nums;
+}
+
+.loader-status em {
+  font-style: normal;
+  margin-left: 6px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader::after,
+  .loader-ring,
+  .loader-ring2 {
+    animation: none;
+  }
+}
+
+/* 小屏：整体收一点 */
+@media (max-width: 768px) {
+  .loader-badge {
+    width: 64px;
+    height: 64px;
+  }
+
+  .loader-avatar {
+    width: 54px;
+    height: 54px;
+  }
+
+  .loader-brand {
+    font-size: 26px;
+  }
+
+  .loader-bar {
+    width: 180px;
+  }
 }

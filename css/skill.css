@@ -1,0 +1,570 @@
+﻿/* ==========================================================================
+   技能 —— 技术图谱（蜘蛛网 + 依赖线 + HUD 读数）
+   桌面：中心 Web + 5 个方向节点 + 外环技术 + 技术之间的依赖虚线。
+   手机：纵向关系树。
+   ========================================================================== */
+
+#skill {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.skill-panel {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 34px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+/* ---------- 头部 ---------- */
+.skill-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.skill-heading h3 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.skill-sub {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.skill-meta {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+
+.skill-meta b {
+  color: #4cd84f;
+  font-weight: 600;
+}
+
+/* ---------- 舞台（承载图谱 + HUD） ---------- */
+.skill-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+/* 雷达扫描 + 网格底纹 */
+.skill-stage::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: min(78%, 720px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(from 0deg, rgba(76, 216, 79, 0.085), rgba(76, 216, 79, 0) 20%);
+  animation: skillRadar 14s linear infinite;
+  opacity: 0.4;
+}
+
+@keyframes skillRadar {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.skill-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(76, 216, 79, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76, 216, 79, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 18%, transparent 72%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 18%, transparent 72%);
+  opacity: 0.5;
+}
+
+.skill-web {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+}
+
+/* ---------- HUD ---------- */
+.skill-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.skill-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(76, 216, 79, 0.42);
+}
+
+.skill-corner.tl {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.skill-corner.tr {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.skill-corner.bl {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+
+.skill-corner.br {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+.skill-counter {
+  position: absolute;
+  top: 4px;
+  right: 20px;
+  z-index: 3;
+  margin: 0;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgba(125, 255, 154, 0.6);
+  pointer-events: none;
+}
+
+.skill-legend {
+  position: absolute;
+  left: 20px;
+  bottom: 4px;
+  z-index: 3;
+  display: flex;
+  gap: 18px;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+}
+
+.skill-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.skill-legend i {
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+}
+
+.skill-legend .lg-core {
+  height: 2px;
+  background: rgba(76, 216, 79, 0.75);
+}
+
+.skill-legend .lg-tech {
+  background: rgba(76, 216, 79, 0.4);
+}
+
+.skill-legend .lg-link {
+  background: repeating-linear-gradient(90deg, rgba(125, 255, 154, 0.65) 0 3px, transparent 3px 6px);
+}
+
+.skill-readout {
+  position: absolute;
+  right: 20px;
+  bottom: 2px;
+  z-index: 3;
+  min-width: 150px;
+  text-align: right;
+  pointer-events: none;
+}
+
+.skill-readout-kicker {
+  margin: 0;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: rgba(76, 216, 79, 0.6);
+}
+
+.skill-readout-name {
+  margin: 5px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #eafff2;
+}
+
+.skill-readout-meta {
+  margin: 4px 0 0;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* ---------- 线条 ---------- */
+.skill-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.skill-lines .web-ring {
+  fill: none;
+  stroke: rgba(76, 216, 79, 0.15);
+  stroke-width: 1;
+  stroke-dasharray: 2 8;
+}
+
+.skill-lines .web-ring-outer {
+  stroke: rgba(76, 216, 79, 0.22);
+}
+
+.skill-lines .web-tick {
+  stroke: rgba(76, 216, 79, 0.18);
+  stroke-width: 1;
+}
+
+.skill-lines .web-tick.is-major {
+  stroke: rgba(76, 216, 79, 0.34);
+}
+
+.skill-lines .web-spoke {
+  stroke: rgba(76, 216, 79, 0.1);
+  stroke-width: 1;
+}
+
+.skill-lines .edge {
+  fill: none;
+  stroke: rgba(76, 216, 79, 0.36);
+  stroke-width: 1;
+  transition: stroke 0.25s ease, opacity 0.25s ease, stroke-width 0.25s ease, filter 0.25s ease;
+}
+
+.skill-lines .edge-core {
+  stroke: rgba(76, 216, 79, 0.6);
+  stroke-width: 1.5;
+}
+
+.skill-lines .edge-link {
+  stroke: rgba(125, 255, 154, 0.34);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  animation: skillLinkDrift 5s linear infinite;
+}
+
+@keyframes skillLinkDrift {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+.skill-lines .edge-shared {
+  stroke: rgba(125, 255, 154, 0.5);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+.skill-lines .edge.is-lit {
+  stroke: #9dffc0;
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 6px rgba(76, 216, 79, 0.85));
+}
+
+/* ---------- 节点 ---------- */
+.skill-node {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  background: rgba(5, 18, 16, 0.8);
+  font-size: 12px;
+  line-height: 1;
+  color: rgba(235, 255, 242, 0.92);
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+  transition: opacity 0.25s ease, border-color 0.25s ease, background-color 0.25s ease,
+    box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.node-port {
+  flex: 0 0 auto;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(76, 216, 79, 0.55);
+  box-shadow: 0 0 6px rgba(76, 216, 79, 0.7);
+  font-style: normal;
+}
+
+.skill-node.skill-core {
+  display: block;
+  padding: 15px 24px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  border-color: rgba(76, 216, 79, 0.5);
+  background: linear-gradient(160deg, rgba(76, 216, 79, 0.18), rgba(76, 216, 79, 0.03));
+  box-shadow: 0 0 0 1px rgba(76, 216, 79, 0.12), 0 0 50px -12px rgba(76, 216, 79, 0.65);
+}
+
+.skill-core b {
+  display: block;
+  line-height: 1.1;
+}
+
+.skill-core small {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: rgba(125, 255, 154, 0.85);
+}
+
+.skill-node.skill-group-node {
+  padding: 8px 13px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  border-color: rgba(76, 216, 79, 0.3);
+  background: linear-gradient(160deg, rgba(10, 34, 28, 0.92), rgba(6, 20, 26, 0.86));
+}
+
+.skill-group-node em {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(76, 216, 79, 0.85);
+}
+
+.skill-tech.is-shared {
+  border-style: dashed;
+}
+
+.skill-node.is-lit {
+  border-color: rgba(76, 216, 79, 0.85);
+  background: rgba(76, 216, 79, 0.16);
+  color: #fff;
+  box-shadow: 0 0 28px -10px rgba(76, 216, 79, 0.9);
+}
+
+.skill-node.skill-core.is-lit {
+  box-shadow: 0 0 0 1px rgba(76, 216, 79, 0.3), 0 0 70px -12px rgba(76, 216, 79, 0.9);
+}
+
+/* 悬停时压暗其它 */
+.skill-web.is-focusing .skill-node:not(.is-lit) {
+  opacity: 0.2;
+}
+
+.skill-web.is-focusing .edge:not(.is-lit) {
+  opacity: 0.1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-stage::before,
+  .skill-lines .edge-link {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   手机：纵向关系树
+   ========================================================================== */
+@media (max-width: 768px) {
+  #skill {
+    height: auto;
+  }
+
+  .skill-panel {
+    height: auto;
+    padding: 26px 14px 30px;
+    gap: 12px;
+  }
+
+  .skill-heading h3 {
+    font-size: 24px;
+  }
+
+  .skill-sub {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+
+  .skill-meta {
+    font-size: 11px;
+  }
+
+  .skill-stage {
+    flex: none;
+  }
+
+  .skill-stage::before,
+  .skill-stage::after,
+  .skill-hud,
+  .skill-counter,
+  .skill-legend,
+  .skill-readout {
+    display: none;
+  }
+
+  .skill-web {
+    height: auto;
+  }
+
+  .skill-v {
+    position: relative;
+    padding-left: 18px;
+    text-align: left;
+  }
+
+  .skill-v::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 30px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(76, 216, 79, 0.5), rgba(76, 216, 79, 0.1));
+  }
+
+  .skill-v-core {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-left: -18px;
+    margin-bottom: 18px;
+    padding: 10px 16px;
+    border: 1px solid rgba(76, 216, 79, 0.45);
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(76, 216, 79, 0.16), rgba(76, 216, 79, 0.03));
+    box-shadow: 0 0 30px -12px rgba(76, 216, 79, 0.7);
+  }
+
+  .skill-v-core b {
+    font-size: 18px;
+    color: #fff;
+  }
+
+  .skill-v-core span {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(125, 255, 154, 0.8);
+  }
+
+  .skill-v-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .skill-v-group {
+    position: relative;
+  }
+
+  .skill-v-group::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 15px;
+    width: 12px;
+    height: 1px;
+    background: rgba(76, 216, 79, 0.3);
+  }
+
+  .skill-v-head {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .skill-v-head em {
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(76, 216, 79, 0.85);
+  }
+
+  .skill-v-head i {
+    font-style: normal;
+    margin-left: auto;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .skill-v-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+  }
+
+  .skill-v-chip {
+    padding: 6px 11px;
+    border: 1px solid rgba(76, 216, 79, 0.2);
+    border-radius: 8px;
+    background: rgba(6, 24, 18, 0.6);
+    font-size: 12px;
+    color: rgba(235, 255, 242, 0.9);
+  }
+
+  .skill-v-chip.is-shared {
+    border-style: dashed;
+  }
+}

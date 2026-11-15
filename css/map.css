@@ -1,0 +1,422 @@
+/* ==========================================================================
+   足迹 —— HUD 风格地图
+   在 css/mobile.css 之后加载；只负责地图这一块，PC 端的布局尺寸保持不变
+   （.map-stage 与原来的 .chartsWrapper 同宽同高）。
+   ========================================================================== */
+
+.mapMark {
+  position: relative;
+}
+
+.map-stage {
+  position: relative;
+  width: 65vw;
+  height: calc(92vh - 100px);
+  margin: 0 auto;
+  isolation: isolate;
+}
+
+.map-stage > #map {
+  position: relative;
+  z-index: 0;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+/* ---------- 网格 / 扫描线 / 四角描边 ---------- */
+.map-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(120, 255, 190, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 255, 190, 0.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 28%, transparent 100%);
+  mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 28%, transparent 100%);
+  opacity: 0.6;
+}
+
+.map-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -160px;
+  height: 160px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(76, 216, 79, 0.06), transparent);
+  animation: mapScan 9s linear infinite;
+}
+
+@keyframes mapScan {
+  0% {
+    top: -160px;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-scan {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.map-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border: 1px solid rgba(76, 216, 79, 0.1);
+}
+
+.map-corner {
+  position: absolute;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  border: 1px solid rgba(76, 216, 79, 0.55);
+  box-shadow: 0 0 12px rgba(76, 216, 79, 0.25);
+}
+
+.map-corner.tl {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.map-corner.tr {
+  top: -1px;
+  right: -1px;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.map-corner.bl {
+  bottom: -1px;
+  left: -1px;
+  border-right: 0;
+  border-top: 0;
+}
+
+.map-corner.br {
+  bottom: -1px;
+  right: -1px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* ---------- 标题 ---------- */
+.map-head {
+  position: absolute;
+  z-index: 4;
+  top: 10px;
+  left: 6px;
+  pointer-events: none;
+  text-align: left;
+}
+
+.map-head h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.map-kicker {
+  margin: 5px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: rgba(76, 216, 79, 0.85);
+}
+
+.map-tip {
+  margin: 12px 0 0;
+  max-width: 260px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(76, 216, 79, 0.92);
+}
+
+/* ---------- 右上角统计 ---------- */
+.map-stats {
+  position: absolute;
+  z-index: 4;
+  top: 14px;
+  right: 6px;
+  display: flex;
+  gap: 24px;
+  pointer-events: none;
+  text-align: right;
+}
+
+.map-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.map-stat b {
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 700;
+  color: #4cd84f;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-stat span {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ---------- 左下角图例 / 底部提示 ---------- */
+.map-legend {
+  position: absolute;
+  z-index: 4;
+  left: 6px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+.map-legend i {
+  width: 96px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(72, 176, 176, 0.45), rgba(76, 216, 79, 0.85), rgba(140, 255, 168, 0.95));
+}
+
+.map-hint {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 9px;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 11px;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+.map-hint-m {
+  display: none;
+}
+
+/* ---------- 自动巡航按钮 ---------- */
+.map-tour {
+  position: absolute;
+  z-index: 5;
+  right: 6px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border: 1px solid rgba(76, 216, 79, 0.3);
+  border-radius: 999px;
+  background: rgba(6, 20, 24, 0.55);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.map-tour svg {
+  display: block;
+}
+
+.map-tour:hover {
+  border-color: rgba(76, 216, 79, 0.6);
+  background: rgba(76, 216, 79, 0.14);
+}
+
+.map-tour.is-on {
+  border-color: rgba(76, 216, 79, 0.75);
+  background: rgba(76, 216, 79, 0.18);
+  box-shadow: 0 0 18px rgba(76, 216, 79, 0.25);
+}
+
+/* ---------- 城市信息卡 ---------- */
+.map-card {
+  position: absolute;
+  z-index: 6;
+  right: 4px;
+  top: 50%;
+  width: 210px;
+  padding: 16px 18px 15px;
+  border: 1px solid rgba(76, 216, 79, 0.32);
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(8, 26, 30, 0.94), rgba(6, 18, 22, 0.88));
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42), inset 0 0 26px rgba(76, 216, 79, 0.06);
+  text-align: left;
+  opacity: 0;
+  transform: translate(14px, -50%);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.map-card.is-on {
+  opacity: 1;
+  transform: translate(0, -50%);
+  pointer-events: auto;
+}
+
+.map-card-kicker {
+  margin: 0;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: rgba(76, 216, 79, 0.75);
+}
+
+.map-card-name {
+  display: block;
+  margin: 6px 0 2px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.map-card-meta {
+  margin: 0;
+  font-size: 12px;
+  color: #9fe9b8;
+}
+
+.map-card-route {
+  margin: 9px 0 0;
+  padding-top: 9px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.map-card-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.map-card-close:hover {
+  background: rgba(76, 216, 79, 0.22);
+}
+
+/* ==========================================================================
+   移动端
+   ========================================================================== */
+@media (max-width: 768px) {
+  .map-stage {
+    width: 100%;
+    height: min(48vh, 400px);
+    min-height: 300px;
+  }
+
+  .map-head {
+    top: 6px;
+    left: 2px;
+  }
+
+  .map-head h3 {
+    font-size: 20px;
+  }
+
+  .map-kicker {
+    margin-top: 3px;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+  }
+
+  .map-tip {
+    margin-top: 7px;
+    max-width: 200px;
+    font-size: 10px;
+  }
+
+  .map-stats {
+    display: none;
+  }
+
+  .map-legend {
+    left: 2px;
+    bottom: 6px;
+  }
+
+  .map-legend i {
+    width: 62px;
+  }
+
+  .map-hint {
+    right: 2px;
+    left: auto;
+    bottom: 6px;
+    transform: none;
+    font-size: 10px;
+  }
+
+  .map-hint-pc {
+    display: none;
+  }
+
+  .map-hint-m {
+    display: inline;
+  }
+
+  .map-tour {
+    display: none;
+  }
+
+  .map-card {
+    right: 0;
+    left: 0;
+    top: auto;
+    bottom: 26px;
+    width: auto;
+    padding: 12px 14px 11px;
+    border-radius: 12px;
+    transform: translateY(10px);
+  }
+
+  .map-card.is-on {
+    transform: translateY(0);
+  }
+
+  .map-card-name {
+    margin: 4px 0 1px;
+    font-size: 18px;
+  }
+
+  .map-card-route {
+    margin-top: 7px;
+    padding-top: 7px;
+  }
+}
